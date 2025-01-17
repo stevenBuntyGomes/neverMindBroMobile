@@ -16,8 +16,11 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID, ENDPOINT } from '../../config';
 import { answerNotificationAction } from '../../Actions/NotificationAction';
 import { ScrollView, View, StyleSheet, Modal, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
-import {WebView} from 'react-native-webview';
+import { getCategory } from '../../Actions/categoryAction';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Importing the icon library
+import { filterFunction } from '../Filters/filter';
+import * as Animatable from 'react-native-animatable';
 let socket;
 
 const handleHead = ({tintColor}) => <Text style={{color: tintColor, fontWeight: 'bold'}}>H2</Text>
@@ -39,9 +42,12 @@ const UpdateAnswerDialog = ({
   const dispatch = useDispatch();
   const [showMsg, setShowMsg] = useState('');
   const [msgType, setMsgType] = useState(0);
+  const [outputText, setOutputText] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const {categories} = useSelector((state) => state.category); 
   const [body, setBody] = useState('');
   const [images, setImages] = useState([]);
-
+  
   const handleBodyChange = (content) => {
     setBody(content);
     AsyncStorage.setItem('blog', content);
@@ -49,11 +55,11 @@ const UpdateAnswerDialog = ({
 
   const updateAnswer = async (e) => {
         e.preventDefault();
-        if(!answer || !body){
+        if(!answer || !outputText){
             setMsgType(2);
             setShowMsg('all the fields are required.');
         }else{
-            dispatch(updateAnswerAction(answer._id, body, images));
+            dispatch(updateAnswerAction(answer._id, outputText, images));
             // setImages([]);
         }
     }
@@ -94,9 +100,19 @@ const UpdateAnswerDialog = ({
     );
   };
 
+
+  useEffect(() => {
+    const result = filterFunction(body, selectedCategories);
+    // console.log(result);
+    setOutputText(result);
+  }, [selectedCategories, body]);
+
   useEffect(() => {
     setBody(answer.body);
   }, [answer]);
+  useEffect(() => {
+    dispatch(getCategory());
+  }, []);
 
     const updateAnswerForm = () => {
     return (
@@ -109,42 +125,43 @@ const UpdateAnswerDialog = ({
 
           <View style={styles.formGroup}>
             <Text style={styles.label}>Body</Text>
-            {/* <WebView
-              originWhitelist={['*']}
-              source={{ html: '<div contenteditable="true">' + body + '</div>' }}
-              onMessage={(event) => handleBodyChange(event.nativeEvent.data)}
-              style={styles.editor}
-            /> */}
-            <RichEditor
-              ref={richText}
-              onChange={handleBodyChange}
-              style={styles.editor}
+            <TextInput
+              style={styles.input}
               placeholder="Write something amazing..."
-              initialContentHTML={body}
+              value={body}
+              onChangeText={setBody}
+              multiline={true}
+              numberOfLines={6}
             />
-            <RichToolbar
-              editor={richText}
-              actions={[
-                actions.heading2,  
-                actions.heading3,  
-                actions.heading4,  
-                actions.heading5,  
-                actions.setBold, 
-                actions.setItalic, 
-                actions.insertBulletsList, 
-                actions.insertOrderedList, 
-                actions.insertLink,
-              ]}
-              iconTint="black"
-              selectedIconTint="blue"
-              disabledIconTint="gray"
-              iconMap={{ 
-                [actions.heading2]: handleHead, 
-                [actions.heading3]: handleHead3, 
-                [actions.heading4]: handleHead4, 
-                [actions.heading5]: handleHead5,  
-              }}
-            />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>choose a Filter</Text>
+            <Animatable.View animation="fadeInUp" duration={1000} style={styles.container}>
+              {categories && (
+                <SectionedMultiSelect
+                  items={categories.map((category) => ({
+                    name: category.name,
+                    id: category.slug,
+                  }))}
+                  uniqueKey="id"
+                  selectText="Select Filter"
+                  single={true} // Ensures only one item can be selected
+                  onSelectedItemsChange={(selectedItems) => {
+                    // Store only the first selected item as a string
+                    if (selectedItems.length > 0) {
+                      setSelectedCategories(selectedItems[0]);
+                    } else {
+                      setSelectedCategories(''); // Clear the selection if no item is selected
+                    }
+                  }}
+                  selectedItems={selectedCategories ? [selectedCategories] : []} // Wrap in array for compatibility
+                  showDropDowns={true}
+                  readOnlyHeadings={false}
+                  IconRenderer={Icon}  
+                  styles={multiSelectStyles}
+                />
+              )}
+            </Animatable.View>
           </View>
           <TouchableOpacity style={styles.button} onPress={updateAnswer}>
               <Text style={styles.buttonText}>Publish</Text>
@@ -152,8 +169,8 @@ const UpdateAnswerDialog = ({
           <TouchableOpacity style={styles.buttonRed} onPress={onClose}>
               <Text style={styles.buttonTextWhite}>close</Text>
           </TouchableOpacity>
-          {showError()}
-          {showMessage()}
+          <Text style={styles.label}>Output will be shown here</Text>
+          <Text>{outputText}</Text>
         </ScrollView>
       </>
     );
@@ -254,6 +271,35 @@ const styles = StyleSheet.create({
   alertText: {
     color: 'white',
   },
+  input: {
+      backgroundColor: '#eee',
+      borderRadius: 5,
+      padding: 12,
+      margin: 8,
+      width: '100%',
+  },
 });
+
+
+const multiSelectStyles = {
+  selectToggle: {
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    backgroundColor: '#f9f9f9',
+  },
+  chipsWrapper: {
+    marginTop: 10,
+  },
+  chipContainer: {
+    borderRadius: 5,
+    backgroundColor: '#e0e0e0',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    margin: 5,
+  },
+};
+
 
 export default UpdateAnswerDialog

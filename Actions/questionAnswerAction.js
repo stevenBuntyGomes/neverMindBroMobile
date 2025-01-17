@@ -146,7 +146,7 @@ export const getQuestionsCategoriesTags = (skip, limit, selectedCategories, sele
 }
 // get questions with categories and tags
 // add answer to a question starts
-export const answerToQuestionAction = (question_id, body, images) => async (dispatch) => {
+export const answerToQuestionAction = (question_id, outputText, images) => async (dispatch) => {
     try{
         dispatch(addAnswerRequest());
 
@@ -157,7 +157,7 @@ export const answerToQuestionAction = (question_id, body, images) => async (disp
                 "token": `${token}`
             },
         };
-        const {data, status} = await axios.post(`${API}/question/answer-to-question-user`, {question_id, body, images, token}, config);
+        const {data, status} = await axios.post(`${API}/question/answer-to-question-user`, {question_id, outputText, images, token}, config);
         if(status == 401){
             handleResponse(status);
         }else{

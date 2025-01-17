@@ -180,9 +180,9 @@ const UpdateReplyAnswer = ({
                     {categories && (
                       <SectionedMultiSelect
                         items={categories.map((category) => ({
-                          name: category.name,
-                          id: category.name,
-                        }))}
+                      name: category.name,
+                      id: category.slug,
+                  }))}
                         uniqueKey="id"
                         selectText="Select Filter"
                         single={true} // Ensures only one item can be selected
@@ -210,12 +210,7 @@ const UpdateReplyAnswer = ({
                     <Text style={styles.buttonTextWhite}>close</Text>
                 </TouchableOpacity>
                 <Text style={styles.label}>The output will look like this</Text>
-                <RenderHtml
-                  contentWidth={contentWidth}
-                  baseStyle={{ fontSize: 18 }}
-                  source={{ html: outputText }}
-                  // source={{ html: `${answer.body.slice(0, 230)}...` }}
-                />
+                <Text>{outputText}</Text>
               </View>
             </View>
           {/* {showError()}

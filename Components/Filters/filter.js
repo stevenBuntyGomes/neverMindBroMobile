@@ -30,45 +30,25 @@ export const filterFunction = (inputText, filterType) => {
 
 // third person past tense starts
 const convertToThirdPersonPastTense = (inputText) => {
-    // Step 1: Parse the input text using Compromise.js
-    inputText = inputText.replace(/(>)(\w)/g, "$1 $2");
-    let doc = nlp(inputText);
-
-    // Handle the first word separately
-    let words = inputText.split(' ');
-    const firstWord = words[0].toLowerCase();
-    console.log(firstWord);
     const pronounMap = {
-        "i": "The Writer",
-        "my": "his/her",
-        "we": "they",
-        "you": "he/she/they",
-        "our": "their",
-        "me": "him/her",
-        "us": "them",
+        'I': 'The Writer',
+        'my': 'his/her',
+        'we': 'they',
+        'you': 'he/she/they',
+        'our': 'their',
+        'me': 'him/her',
+        'us': 'them',
     };
 
-    // Check if the first word is a pronoun and replace it
-    if (pronounMap[firstWord]) {
-        words[0] = pronounMap[firstWord];
-        inputText = words.join(' ');
-        // Update the document to reflect the change
-        doc = nlp(inputText);
-    }
+    // Replace pronouns manually
+    let modifiedText = inputText.replace(/\b(I|my|we|you|our|me|us)\b/g, (match) => {
+        return pronounMap[match] || match;
+    });
 
-    // Step 2: Replace first-person and second-person pronouns with third-person equivalents
-    doc.replace("I", "The Writer");
-    doc.replace("my", "his/her");
-    doc.replace("we", "they");
-    doc.replace("you", "he/she/they");
-    doc.replace("our", "their");
-    doc.replace("me", "him/her");
-    doc.replace("us", "them");
-
-    // Step 3: Convert verbs to past tense using Compromise.js built-in methods
+    // Use Compromise.js only for verb tense conversion
+    const doc = nlp(modifiedText);
     doc.verbs().toPastTense();
 
-    // Step 4: Return the transformed text
     return doc.out();
 };
 
@@ -102,17 +82,17 @@ export const convertToFutureTense = (inputText) => {
 // third person future tense starts
 const convertToThirdPersonFutureTense = (inputText) => {
     // Step 1: Parse the input text using Compromise.js
-    inputText = inputText.replace(/(>)(\w)/g, "$1 $2");
+    // inputText = inputText.replace(/(>)(\w)/g, "$1 $2");
     let doc = nlp(inputText);
 
     // Step 2: Replace first-person and second-person pronouns with third-person equivalents
-    doc.replace("I", "The person");
-    doc.replace("my", "his/her");
-    doc.replace("we", "they");
-    doc.replace("you", "he/she/they");
-    doc.replace("our", "their");
-    doc.replace("me", "him/her");
-    doc.replace("us", "them");
+    doc.match('I').replaceWith('The Writer');
+    doc.match('my').replaceWith('his/her');
+    doc.match('we').replaceWith('they');
+    doc.match('you').replaceWith('he/she/they');
+    doc.match('our').replaceWith('their');
+    doc.match('me').replaceWith('him/her');
+    doc.match('us').replaceWith('them');
 
     // Step 3: Convert verbs to future tense using Compromise.js built-in methods
     doc.verbs().toFutureTense();
@@ -326,8 +306,9 @@ const convertToEmojis = (inputText) => {
         "earthquake": "🌍💥","volcano": "🌋","wildfire": "🔥🌲","tornado": "🌪️","cyclone": "🌀","hurricane": "🌀","flood": "🌊",
         "landslide": "⛰️🌊","avalanche": "🏔️❄️","tsunami": "🌊","thunderstorm": "⛈️","blizzard": "🌨️","sandstorm": "🌪️🏜️",
         "dust storm": "🌪️🏜️","mudslide": "⛰️🌧️", 'european union': '🇪🇺', 'euro': 'euro🏆', 'copa america': 'copa america🏆',
-        "sparkle": "✨", "spark": "💥", "thunder": "⚡", "vibe": "🤟💥🥂✨️", "dm": "💌", "envelope": "✉️", "lit": "🔥💯", "vibes": "🤟💥🥂✨️",
+        "sparkle": "✨", "spark": "💥", "thunder": "⚡", "vibe": "🤟💥🥂✨️", "vibes": "🤟💥🥂✨️", "dm": "💌", "envelope": "✉️", "lit": "🔥💯",
         "settings": "⚙️", "option": "☰", "options": "☰s", "puzzle": "🧩🧩", "puzzled": "🧩🧩","solution": "💡", "solve": "💡",
+        "comment": "💬", "support": "🎗️",
     };
 
     // Sort the emojiMap keys by length (longest first) to prioritize longer phrases

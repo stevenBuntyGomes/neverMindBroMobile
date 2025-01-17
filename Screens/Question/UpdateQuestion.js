@@ -78,9 +78,9 @@ const UpdateQuestion = ({ route }) => {
             {categories && (
               <SectionedMultiSelect
                 items={categories.map((category) => ({
-                  name: category.name,
-                  id: category._id,
-                }))}
+                      name: category.name,
+                      id: category.slug,
+                  }))}
                 uniqueKey="id"
                 selectText="Select Categories"
                 onSelectedItemsChange={(selectedItems) => setSelectedCategories(selectedItems)}
@@ -120,7 +120,7 @@ const UpdateQuestion = ({ route }) => {
           <Text style={styles.buttonText}>Update Question</Text>
         </TouchableOpacity>
         <Text style={styles.label}>The output will look like this</Text>
-        <Text style={styles.buttonText}>{outputText}</Text>
+        <Text>{outputText}</Text>
       </ScrollView>
     </SafeAreaView>
   );

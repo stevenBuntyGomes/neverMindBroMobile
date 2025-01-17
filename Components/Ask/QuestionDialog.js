@@ -124,7 +124,7 @@ const QuestionDialog = ({
                 style={styles.input}
                 placeholder="Add Question"
                 value={question}
-                onChangeText={setQuestion}
+                onChangeText={handleBodyChange}
                 multiline={true} // Allows multiple lines of text
                 numberOfLines={6} // Shows 4 rows by default
             />
@@ -157,7 +157,7 @@ const QuestionDialog = ({
                   <SectionedMultiSelect
                     items={categories.map((category) => ({
                       name: category.name,
-                      id: category._id,
+                      id: category.slug,
                     }))}
                     uniqueKey="id"
                     selectText="Choose Filter"
@@ -178,7 +178,7 @@ const QuestionDialog = ({
               <Text style={styles.buttonTextWhite}>close</Text>
           </TouchableOpacity>
           <Text style={styles.label}>The output will look like this</Text>
-          <Text style={styles.buttonText}>{outputText}</Text>
+          <Text>{outputText}</Text>
         </ScrollView>
       </>
     );
