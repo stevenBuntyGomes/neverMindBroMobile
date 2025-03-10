@@ -46,9 +46,9 @@ const FooterTabs = () => {
                     routeName = {route.name} 
                 />
                 <Icon
-                    name = "plus-square" 
-                    text = "Create Book" 
-                    handlePress = {() => navigation.navigate('CreateBook')}
+                    name = "facebook-messenger" 
+                    text = "Chats" 
+                    handlePress = {() => navigation.navigate('Chats')}
                     screenName = "CreateBook"
                     routeName = {route.name} 
                 />

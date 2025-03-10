@@ -37,6 +37,9 @@ import {
     getSearchBlogAllRequest,
     getSearchBlogAllSuccess,
     getSearchBlogAllFailure,
+    getSearchUserChatRequest,
+    getSearchUserChatSuccess,
+    getSearchUserChatFailure,
     emptySearchBlogRequest,
     emptySearchBlogSuccess,
     emptySearchBlogFailure,
@@ -316,6 +319,31 @@ export const searchBlogsAll = (params) => async (dispatch) => {
         dispatch(getSearchBlogAllFailure(error.message));
     }
 }
+
+// searchh user for chat starts
+export const searchUserChats = (params) => async (dispatch) => {
+    try{
+        dispatch(getSearchUserChatRequest());
+        let query = queryString.stringify(params);
+        const token = await AsyncStorage.getItem('@token');
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "token": `${token}`
+            },
+        };
+        const {data, status} = await axios.get(`${API}/blog/blogs/search_user_chat?${query}`, config);
+        if(status == 401){
+            handleResponse(status);
+        }else{
+            dispatch(getSearchUserChatSuccess(data));
+        } 
+    }catch(error){
+        dispatch(getSearchUserChatFailure(error.message));
+    }
+}
+// searchh user for chat ends
 
 // empty search blog
 export const emptySearchBlog = () => async (dispatch) => {

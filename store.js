@@ -6,6 +6,8 @@ import notificationReducer from './Reducers/NotificationReducer';
 import blogReducer from './Reducers/blogReducer';
 import questionAnswerReducer from './Reducers/QuestionAnswerReducer';
 import advertiseReducer from './Reducers/advertiseReducer';
+import userChatReducer from './Reducers/chatReducer';
+import messageReducer from './Reducers/messageReducer';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
     questionAnswer: questionAnswerReducer,
     notification: notificationReducer,
     advertise: advertiseReducer,
+    userChat: userChatReducer,
+    messages: messageReducer
   },
 });
 

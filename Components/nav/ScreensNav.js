@@ -23,6 +23,8 @@ import ProfileSettings from '../../Screens/Profile/ProfileSettings';
 import Blogs from '../../Screens/Blogs/Blogs';
 import BlogCreate from '../../Screens/Blogs/BlogCreate';
 import BlogUpdate from '../../Screens/Blogs/BlogUpdate';
+import Chats from '../../Screens/Chat/Chats';
+import ResponsiveChatBox from '../../Screens/Chat/SingleChat';
 
 const Stack = createNativeStackNavigator();
 
@@ -194,6 +196,32 @@ export default function ScreensNav(){
 
               }
           }/>
+          {/* chat screens */}
+          <Stack.Screen name = "Chats" component={Chats}
+              options = {{
+                  title: "Chats",
+                  headerRight: () => <HeaderTabs/>,
+                  headerStyle: {
+                    backgroundColor: 'white', // Set the background color of the header
+                  },
+                  headerTitleStyle: {
+                    color: '#333', // Set the header title color
+                  },
+              }
+          }/>
+          <Stack.Screen name = "ResponsiveChatBox" component={ResponsiveChatBox}
+              options = {{
+                  title: "Single Chat",
+                  headerRight: () => <HeaderTabs/>,
+                  headerStyle: {
+                    backgroundColor: 'white', // Set the background color of the header
+                  },
+                  headerTitleStyle: {
+                    color: '#333', // Set the header title color
+                  },
+              }
+          }/>
+          {/* chat screens */}
         </>
       ) : (
         <>

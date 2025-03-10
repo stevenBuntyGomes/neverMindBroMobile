@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    
     scrollViewContent: {
         padding: 20,
         backgroundColor: 'white',

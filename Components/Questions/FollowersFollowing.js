@@ -96,11 +96,11 @@ const FollowersFollowing = () => {
     setLoadingMoreQuestions(true);
     let toSkip = skip + limit;
     const config = {
-            headers: {
-                "Accept": "application/json",
-                "token": `${token}`
-            },
-        };
+        headers: {
+            "Accept": "application/json",
+            "token": `${token}`
+        },
+    };
     const {data, status} = await axios.post(`${API}/question/get-question-following-followers`, {toSkip, limit}, config);
     setLoadMoreQuestions([...loadMoreQuestions, ...data.questions]);
     setSkip(toSkip);

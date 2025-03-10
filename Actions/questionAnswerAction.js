@@ -141,7 +141,7 @@ export const getQuestionsCategoriesTags = (skip, limit, selectedCategories, sele
             dispatch(getQuestionCatTagsSuccess(data));
         }
     }catch(error){
-        dispatch(getQuestionCatTagsFailure(error.message));
+        dispatch(getQuestionCatTagsFailure(error?.message));
     }
 }
 // get questions with categories and tags
