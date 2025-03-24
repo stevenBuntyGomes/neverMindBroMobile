@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import User from "../User/User";
 import { emptySearchUser } from '../../Reducers/chatReducer';
-import { searchUserAction } from '../../Actions/chatAction';
+import { searchUserAction, userChat } from '../../Actions/chatAction';
 import { Button } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SearchResult from './SearchResult';
@@ -48,6 +48,10 @@ const SearchDialogBox = () => {
     await dispatch(emptySearchUser());
   };
 
+  const accessChat = async (userId) => {
+      await dispatch(userChat(userId));
+      // dispatch(fetchChats());
+  }
   
   useEffect(() => {
     getToken();
@@ -106,13 +110,21 @@ const SearchDialogBox = () => {
         showsHorizontalScrollIndicator={false}
       >
         {searchUser.length > 0 ? (
-          searchUser.map((user, index) => (
-            <User key={user._id} userId={user._id} name={user.name} photo={user.photo?.url} username={user.username} />
+          searchUser.map((user) => (
+            <View key={user._id} style={styles.userContainer}>
+              {/* User Component */}
+              <User userId={user._id} name={user.name} photo={user.photo?.url} username={user.username} />
+
+              {/* Chat Button */}
+              <TouchableOpacity style={styles.chatButton} onPress={() => accessChat(user._id)}>
+                <FontAwesome5 name="facebook-messenger" size={20} color="#333" />
+              </TouchableOpacity>
+            </View>
           ))
         ) : (
           <Text style={styles.noResults}>No users found.</Text>
         )}
-        {size >= limit && (
+         {size >= limit && (
           <TouchableOpacity
             onPress={() => loadMoreSearchUserHandler()}
             style={styles.searchAllButton}
@@ -186,6 +198,28 @@ const SearchDialogBox = () => {
 export default SearchDialogBox;
 
 const styles = StyleSheet.create({
+  userContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  chatButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    marginBottom: 15,
+  },
+  chatText: {
+    color: 'white',
+    fontSize: 14,
+    marginLeft: 5,
+  },
   searchButton: {
     padding: 8,
     borderRadius: 50,
@@ -202,10 +236,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    width: '85%',
+    width: '90%',
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 20,
+    paddingTop: 20,
+    // paddingLeft: 5,
+    // paddingRight: 5,
+    paddingBottom: 20,
     alignItems: 'center',
   },
   modalTitle: {
@@ -214,7 +251,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   searchInput: {
-    width: '100%',
+    width: '85%',
     padding: 10,
     borderRadius: 8,
     borderWidth: 1,
@@ -229,12 +266,14 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 15,
-    backgroundColor: '#007bff',
+    backgroundColor: '#333',
+    color: 'white',
   },
 
   // search results styles
   scene: {
-    padding: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   searchAllButton: {
     alignItems: "center",

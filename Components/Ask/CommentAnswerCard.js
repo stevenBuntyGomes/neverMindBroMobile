@@ -33,6 +33,7 @@ import UpdateCommentAnswer from './UpdateCommentAnswer';
 import Toast from 'react-native-toast-message';
 import { LikeNotificationAction, unlikeNotificationAction } from '../../Actions/NotificationAction';
 import {io} from 'socket.io-client'
+import { getSocket } from '../../SocketClient';
 let socket;
 
 const CommentAnswerCard = ({
@@ -120,9 +121,7 @@ const CommentAnswerCard = ({
   
 
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      transports: ['websocket'], // Use websocket for better performance in React Native
-    });
+    socket = getSocket();
   }, []);
   
   return (

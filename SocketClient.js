@@ -6,6 +6,7 @@ export const initializeSocket = (ENDPOINT) => {
     socket = io(ENDPOINT, { transports: ['websocket'] });
     console.log('Socket initialized:', socket);
   }
+  // console.log('Socket initialized:', socket);
   return socket;
 };
 

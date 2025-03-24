@@ -24,6 +24,7 @@ import { getTags } from '../../Actions/tagAction';
 import { getCategory } from '../../Actions/categoryAction';
 import { filterFunction } from '../Filters/filter';
 import {io} from 'socket.io-client'
+import { getSocket } from '../../SocketClient';
 let socket;
 
 const handleHead = ({tintColor}) => <Text style={{color: tintColor, fontWeight: 'bold'}}>H2</Text>
@@ -70,9 +71,7 @@ const QuestionDialog = ({
   }, [selectedCategories, question]);
   
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      transports: ['websocket'], // Use websocket for better performance in React Native
-    });
+    socket = getSocket();
   }, []);
 
 

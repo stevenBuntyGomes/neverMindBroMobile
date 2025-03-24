@@ -14,6 +14,7 @@ import FollowersFollowing from '../Components/Questions/FollowersFollowing';
 import TagsCategories from '../Components/Questions/TagsCategories';
 import { getAuthUserInPublic } from '../Actions/publicUserAction';
 import { io } from 'socket.io-client';
+import { getSocket } from '../SocketClient';
 import { API, ENDPOINT } from '../config';
 import { notificationBarUpdateAction } from '../Actions/NotificationAction';
 import { answerNotificationAction } from '../Actions/NotificationAction';
@@ -123,131 +124,129 @@ const Home = () => {
   ]);
 
   useEffect(() => {
-      socket = io(ENDPOINT, {
-        transports: ['websocket'], // Use websocket for better performance in React Native
-      });
-      if(auth && auth.name !== undefined && !socketConnected){
-        setSocketConnected(true);
-        console.log(auth?.name);
-        socket.emit("setup", auth && auth);
-      }
-      socket.on('connected', () => {
-        console.log('auth user connected and joined socket io');
-      });
-      socket.on('liked post', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          targetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-          _id: notifier.targetId,
-        }
-        console.log('post liked');
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      // liked comment of answer
-      socket.on('liked comment post', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          targetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
+      socket = getSocket();
+      // if(auth && auth.name !== undefined && !socketConnected){
+      //   setSocketConnected(true);
+      //   console.log(auth?.name);
+      //   socket.emit("setup", auth && auth);
+      // }
+      // socket.on('connected', () => {
+      //   console.log('auth user connected and joined socket io');
+      // });
+      // socket.on('liked post', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     targetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //     _id: notifier.targetId,
+      //   }
+      //   console.log('post liked');
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // // liked comment of answer
+      // socket.on('liked comment post', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     targetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
       
-      // liked comment of answer
-      // comment answer
-      socket.on('comment answer', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          targetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      // comment answer
-      // reply on comment answer
-      socket.on('reply on comment answer', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          targetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      // reply on comment answer
-      // answer question notification
-      socket.on('receive answer notification', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          targetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      // answer question notification 
-      // receive question notification
-      socket.on('receive question notification', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          targetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      // receive question notification
-      // <<--BLOG NOTIFICATION-->>
-      socket.on('new blog notification', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          blogTargetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      socket.on('liked blog', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          blogTargetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      socket.on('liked comment on blog', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          blogTargetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      socket.on('comment on blog', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          blogTargetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-          // link: notifier.link,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
-      socket.on('reply comment on blog', (notifier, notification) => {
-        let notificationObj = {
-          title: notification,
-          blogTargetType: notifier.targetType,
-          targetId: notifier.targetId,
-          sender: notifier.sender,
-        }
-        dispatch(notificationBarUpdateAction(notificationObj));
-      });
+      // // liked comment of answer
+      // // comment answer
+      // socket.on('comment answer', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     targetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // // comment answer
+      // // reply on comment answer
+      // socket.on('reply on comment answer', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     targetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // // reply on comment answer
+      // // answer question notification
+      // socket.on('receive answer notification', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     targetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // // answer question notification 
+      // // receive question notification
+      // socket.on('receive question notification', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     targetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // // receive question notification
+      // // <<--BLOG NOTIFICATION-->>
+      // socket.on('new blog notification', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     blogTargetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // socket.on('liked blog', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     blogTargetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // socket.on('liked comment on blog', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     blogTargetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // socket.on('comment on blog', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     blogTargetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //     // link: notifier.link,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
+      // socket.on('reply comment on blog', (notifier, notification) => {
+      //   let notificationObj = {
+      //     title: notification,
+      //     blogTargetType: notifier.targetType,
+      //     targetId: notifier.targetId,
+      //     sender: notifier.sender,
+      //   }
+      //   dispatch(notificationBarUpdateAction(notificationObj));
+      // });
       // <<--BLOG NOTIFICATION-->>
     }, [auth?.name]);
 

@@ -21,6 +21,7 @@ import {WebView} from 'react-native-webview';
 import User from '../User/User';
 import RenderHtml from 'react-native-render-html';
 import { io } from 'socket.io-client';
+import { getSocket } from '../../SocketClient';
 import { getCategory } from '../../Actions/categoryAction';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Importing the icon library
@@ -89,9 +90,7 @@ const WriteCommentQuestion = ({
 
   
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      transports: ['websocket'], // Use websocket for better performance in React Native
-    });
+    socket = getSocket();
     dispatch(getCategory());
   }, []);
 

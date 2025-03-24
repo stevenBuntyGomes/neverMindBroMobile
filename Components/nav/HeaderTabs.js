@@ -17,7 +17,6 @@ const HeaderTabs = ({}) => {
   const route = useRoute();
   const { token, loading } = useSelector((state) => state.user);
   const { notification, unreadNotifications } = useSelector((state) => state.notification);
-  
   const [notificationCount, setNotificationCount] = useState([]);
 
   const signOut = async () => {

@@ -1,24 +1,34 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {TouchableOpacity, View, StyleSheet} from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import Texts from '@kaloraat/react-native-text'
 import {Divider} from 'react-native-elements'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { Badge } from 'react-native-paper';
+import { useSelector } from 'react-redux'
 
 export const Icon = ({name, text, handlePress, screenName, routeName}) => {
-    const activeScreenColor = screenName === routeName && 'white'; 
+    const activeScreenColor = screenName === routeName && 'white';
+    const { messageNotifications } = useSelector((state) => state.messages);
+    const [messageNotificationCount, setMessageNotifciationCount] = useState([]);
+
+    useEffect(() => {
+    // console.log('notification has been updated', messageNotifications);
+        setMessageNotifciationCount(messageNotifications);
+    }, [messageNotifications?.length]);
     return (
         <TouchableOpacity onPress={handlePress}>
             <>
+                {name == 'facebook-messenger' && messageNotificationCount.length > 0 && (
+                    <Badge style={styles.badge}>{messageNotificationCount.length}</Badge>
+                )}
                 <FontAwesome5
                     name = {name} 
                     size = {25} 
                     style = {styles.fontAwesome}
                     color = {activeScreenColor}
                 />
-                {/* <Texts>
-                    {text}
-                </Texts> */}
+                
             </>
         </TouchableOpacity>
     );
@@ -84,5 +94,19 @@ const styles = StyleSheet.create({
         marginBottom: 3,
         alignSelf: 'center',
         color: 'white'
+    },
+    badge: {
+        position: 'absolute',
+        zIndex: 100,
+        top: -4,
+        right: -10,
+        backgroundColor: 'red',
+        color: '#fff',
+        fontSize: 12,
+        height: 20,
+        minWidth: 20,
+        borderRadius: 10,
+        textAlign: 'center',
+        paddingHorizontal: 4,
     },
 });

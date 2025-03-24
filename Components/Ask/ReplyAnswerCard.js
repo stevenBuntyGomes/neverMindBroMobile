@@ -27,6 +27,7 @@ import { LikeNotificationAction, unlikeNotificationAction } from '../../Actions/
 import User from '../User/User';
 import RenderHtml from 'react-native-render-html';
 import {io} from 'socket.io-client'
+import { getSocket } from '../../SocketClient';
 let socket;
 
 const ReplyAnswerCard = ({
@@ -97,9 +98,7 @@ const ReplyAnswerCard = ({
   }
 
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      transports: ['websocket'], // Use websocket for better performance in React Native
-    });
+    socket = getSocket();
   }, []);
 
 

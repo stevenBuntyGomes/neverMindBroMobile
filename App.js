@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import RootNavigation from './RootNavigation'
 import { Provider } from 'react-redux';
 import { store } from './store';
+import { ENDPOINT } from './config';
+import { useNavigationContainerRef } from "@react-navigation/native";
+let socket;
 
 export default function App() {
   return (

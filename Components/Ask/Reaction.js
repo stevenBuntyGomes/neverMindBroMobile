@@ -26,6 +26,7 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID, ENDPOINT } from '../../config';
 import RenderHtml from 'react-native-render-html';
 import Toast from 'react-native-toast-message';
 import {io} from 'socket.io-client'
+import { getSocket } from '../../SocketClient';
 let socket;
 
 const Reaction = ({ question, answer }) => {
@@ -83,9 +84,7 @@ const Reaction = ({ question, answer }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      transports: ['websocket'], // Use websocket for better performance in React Native
-    });
+    socket = getSocket();
   }, []);
 
   useEffect(() => {

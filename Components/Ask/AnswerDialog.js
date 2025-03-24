@@ -23,6 +23,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'; // Importing the ico
 import { filterFunction } from '../Filters/filter';
 import * as Animatable from 'react-native-animatable';
 import {io} from 'socket.io-client'
+import { getSocket } from '../../SocketClient';
 import RenderHtml from 'react-native-render-html';
 let socket;
 
@@ -88,9 +89,7 @@ const AnswerDialog = ({
   };
 
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      transports: ['websocket'], // Use websocket for better performance in React Native
-    });
+    socket = getSocket();
     dispatch(getCategory());
   }, []);
 

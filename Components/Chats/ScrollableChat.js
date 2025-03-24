@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTokenApp } from '../../Actions/userAction';
-import { deleteMessageAction } from '../../Actions/messageAction';
+import { deleteMessageAction, sendMessageNotifications, sendMessage } from '../../Actions/messageAction';
+import { notificationChatSuccess } from '../../Reducers/chatReducer';
 import { nullifyDelMesageIdSuccess } from '../../Reducers/messageReducer';
 import { isSameSender, isLastMessage, isSameSenderMargin, isSameUser } from './chatConfig';
 import { API } from '../../config';
@@ -39,9 +40,10 @@ const ScrollableChat = ({ chatId, messages, auth }) => {
   };
 
   const newMessageIncomingHandler = async () => {
-    if (newMessageReceived) {
+    if (newMessageReceived !== null) {
       await setAllMessages((prevMessages) => [...prevMessages, newMessageReceived]);
       console.log(newMessageReceived);
+      // console.log(newMessageReceived);
       await dispatch(nulifyNewMessageSuccess());
 
       // Ensure scroll moves to the bottom when a new message arrives
@@ -55,6 +57,7 @@ const ScrollableChat = ({ chatId, messages, auth }) => {
 
   useEffect(() => {
     newMessageIncomingHandler();
+    console.log('new message received => ', newMessageReceived);
   }, [newMessageReceived]);
 
 
@@ -147,7 +150,7 @@ const ScrollableChat = ({ chatId, messages, auth }) => {
       >
         {allMessages.map((message, index) => (
           <View
-            key={message?._id}
+            key={index}
             style={styles.messageWrapper}
           >
             {(isSameSender(allMessages, message, index, auth?._id) || isLastMessage(allMessages, index, auth?._id)) && (

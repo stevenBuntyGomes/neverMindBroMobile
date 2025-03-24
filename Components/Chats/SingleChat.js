@@ -9,9 +9,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
   Platform,
   Modal,
   ScrollView,
+  Keyboard,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
@@ -30,7 +32,6 @@ import { notificationChatSuccess } from '../../Reducers/chatReducer';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { setTokenApp } from '../../Actions/userAction';
-
 
 
 // Initialize Socket
@@ -71,14 +72,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [chat]);
   
   useEffect(() => {
-    // socket = getSocket();
+    socket = getSocket();
     getAuthUserHandler();
     dispatch(getCategory());
     getToken();
   }, [dispatch]);
 
   useEffect(() => {
-    if (messageReceivedNotify) {
+    if (messageReceivedNotify !== null) {
       handleReceivedMessage(messageReceivedNotify);
     }
   }, [messageReceivedNotify]);
@@ -106,10 +107,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       if (!messageNotifications?.includes(message)) {
         await dispatch(sendMessageNotifications(message));
         await dispatch(notificationChatSuccess(message));
+        console.log('sending notification to notification bar');
       } else {
         await dispatch(notificationChatSuccess(message));
+        console.log('sending notification only');
       }
     } else {
+      console.log('sending message selected chat =>', message);
       await dispatch(sendMessage(message));
     }
   };
@@ -193,7 +197,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           )}
 
           {/* Message Input */}
-          <View style={styles.inputContainer}>
+          <View style={styles.inputContainer}>TouchableOpacity
             <TouchableOpacity onPress={() => setCategoryModalVisible(true)} style={styles.iconButton}>
               <FontAwesome5 name="smile" size={22} color="gray" />
             </TouchableOpacity>
@@ -213,7 +217,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           <Modal visible={categoryModalVisible} transparent animationType="slide">
             <View style={styles.modalOverlay}>
               <View style={styles.modalContainer}>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                   {categories.map((category) => (
                     <TouchableOpacity
                       key={category._id}
@@ -259,4 +263,11 @@ const styles = StyleSheet.create({
   sendButton: { backgroundColor: '#007bff', padding: 10, borderRadius: 20 },
   emptyChat: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   emptyText: { fontSize: 16, color: 'gray' },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.6)', justifyContent: 'center', alignItems: 'center' },
+  modalContainer: { height: '80%', width: '80%', backgroundColor: '#f8f9fa', borderRadius: 10, padding: 20, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 10 },
+  modalItem: { padding: 15, borderBottomWidth: 1, borderBottomColor: '#ccc', width: '100%', alignItems: 'center' },
+  modalText: { fontSize: 18, fontWeight: 'bold', color: '#333' },
+  closeButton: { marginTop: 10, padding: 10, backgroundColor: '#007bff', borderRadius: 5 },
+  closeButtonText: { fontSize: 16, color: 'white', fontWeight: 'bold' },
+  scrollView: { width: '100%' },
 });

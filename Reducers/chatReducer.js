@@ -20,7 +20,7 @@ export const userChatReducer = createSlice({
         },
         userChatSuccess: (state, action) => {
             state.chat = action.payload.chat;
-            state.userChats = [action.payload.chat, ...state.userChats];
+            // state.userChats = [action.payload.chat, ...state.userChats];
         },
         userChatFailure: (state, action) => {
 

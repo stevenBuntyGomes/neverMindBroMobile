@@ -12,15 +12,19 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchChats, setSelectedChat } from '../../Actions/chatAction';
+import { sendMessage, fetchMessages, sendMessageNotifications } from '../../Actions/messageAction';
 import { getSender } from './chatConfig';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { getAuthUserInPublic } from '../../Actions/publicUserAction';
 import { setTokenApp } from '../../Actions/userAction';
 import { useNavigation } from '@react-navigation/native';
 import { API } from '../../config';
+import { notificationChatSuccess } from '../../Reducers/chatReducer';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import { getSocket } from '../../SocketClient';
 import SearchDialogBox from './SearchDialogBox';
+import { Badge } from 'react-native-paper';
 
 // Socket connection
 let socket = null;
@@ -30,6 +34,7 @@ const MyChat = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { userChats, chat: selectedChat, newChat, chatSize } = useSelector((state) => state.userChat);
+  const { messageNotifications, messageReceivedNotify } = useSelector((state) => state.messages);
   const { token, auth, user } = useSelector((state) => state.user);
   const [allChats, setAllChats] = useState([]);
   const [unreadCounts, setUnreadCounts] = useState({});
@@ -73,6 +78,42 @@ const MyChat = () => {
     await dispatch(getAuthUserInPublic());
   };
 
+  // calculate unread messages
+    const calculateUnreadMessages = async (chats) => {
+      const counts = {};
+      console.log('we are inside the function...');
+
+      for (const chat of chats) {
+        let unreadMessages = 0;
+        if (chat?.latestMessages && Array.isArray(chat?.latestMessages)) {
+          console.log('we are inside the function inside array...');
+          for (const message of chat.latestMessages) {
+            if (!message?.isReadBy?.includes(auth?._id)) {
+              unreadMessages++;
+            }
+          }
+        }
+
+        counts[chat?._id] = unreadMessages;
+      }
+
+      console.log('Unread Counts:', counts);
+      setUnreadCounts(counts);
+    };
+
+  // calculate unread messages
+
+  const handleReceivedMessage = async (message) => {
+    if (!messageNotifications?.includes(message)) {
+      await dispatch(sendMessageNotifications(message));
+      await dispatch(notificationChatSuccess(message));
+      console.log('sending notification to notification bar');
+    } else {
+      await dispatch(notificationChatSuccess(message));
+      console.log('sending notification only');
+    }
+  };
+
   useEffect(() => {
     getAuthUserHandler();
     getToken();
@@ -80,6 +121,16 @@ const MyChat = () => {
   useEffect(() => {
     fetchChatHandler();
   }, [auth]);
+
+  useEffect(() => {
+    if (messageReceivedNotify !== null) {
+      handleReceivedMessage(messageReceivedNotify);
+    }
+  }, [messageReceivedNotify]);
+
+  useEffect(() => {
+    console.log(unreadCounts);
+  }, [unreadCounts]);
 
   useEffect(() => {
     setAllChats([...userChats]);
@@ -90,20 +141,27 @@ const MyChat = () => {
     if (!selectedChat) return;
     setAllChats((prevChats) => {
       const filteredChats = prevChats.filter((chat) => chat?._id !== selectedChat?._id);
-      return [selectedChat, ...filteredChats];
+      const updated = [selectedChat, ...filteredChats];
+      calculateUnreadMessages(updated);
+      return updated;
     });
   }, [selectedChat]);
+
 
   useEffect(() => {
     if (!newChat) return;
     setAllChats((prevChats) => {
       const filteredChats = prevChats.filter((chat) => chat?._id !== newChat?.chat?._id);
-      return [newChat?.chat, ...filteredChats];
+      const updated = [newChat?.chat, ...filteredChats];
+      // console.log('new updated chat is created with new message =>', updated);
+      calculateUnreadMessages(updated);
+      return updated;
     });
   }, [newChat]);
 
+
   useEffect(() => {
-    socket = io(ENDPOINT, { transports: ['websocket'] });
+    socket = getSocket();
     if (auth && auth.name && !socketConnected) {
       setSocketConnected(true);
       socket.emit('setup', auth);
@@ -134,28 +192,41 @@ const MyChat = () => {
             ]}
             onPress={() => setSelectedChatHandler(item)}
           >
-            <Image
-              source={{
-                uri:
-                  !item?.isGroupChat && item?.users[0]?.photo
-                    ? item.users[0].photo.url
-                    : 'https://via.placeholder.com/150',
-              }}
-              style={styles.avatar}
-            />
-            <View style={styles.chatDetails}>
-              <Text style={styles.chatText}>
-                {!item?.isGroupChat ? getSender(auth, item?.users) : item?.chatName}
-              </Text>
-              <Text style={styles.lastMessage}>Last message goes here...</Text>
-            </View>
-            {unreadCounts[item?._id] > 0 && (
-              <View style={styles.unreadBadge}>
-                <Text style={styles.unreadText}>{unreadCounts[item?._id]}</Text>
+            {/* Horizontal row container */}
+            <View style={styles.chatRow}>
+              {/* Avatar */}
+              <Image
+                source={{
+                  uri:
+                    !item?.isGroupChat && item?.users[0]?.photo
+                      ? item.users[0].photo.url
+                      : 'https://via.placeholder.com/150',
+                }}
+                style={styles.avatar}
+              />
+
+              {/* Chat details */}
+              <View style={styles.chatDetails}>
+                <Text style={styles.chatText}>
+                  {!item?.isGroupChat ? getSender(auth, item?.users) : item?.chatName}
+                </Text>
+                <Text style={styles.lastMessage}>Last message goes here...</Text>
               </View>
+
+              {/* Trash icon */}
+              <TouchableOpacity style={styles.trashIcon}>
+                <FontAwesome5 name="trash" size={20} color="gray" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Unread badge */}
+            {/* <Badge style={styles.badge}>{unreadCounts[item?._id]}</Badge> */}
+            {unreadCounts[item?._id] > 0 && (
+              <Badge style={styles.badge}>{unreadCounts[item?._id]}</Badge>
             )}
           </TouchableOpacity>
         )}
+
         ListFooterComponent={() =>
           loadingMoreChats && <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
         }
@@ -165,7 +236,7 @@ const MyChat = () => {
           }
         }}
         onEndReachedThreshold={0.5}
-        showsVerticalScrollIndicator={false} // 🔹 This hides the scrollbar
+        showsVerticalScrollIndicator={false} // This hides the scrollbar
       />
     </SafeAreaView>
   );
@@ -201,9 +272,9 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 25,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#f8f8f8',
+    // borderWidth: 1,
+    // borderColor: '#ddd',
+    backgroundColor: '#ffffff',
   },
   selectedChat: {
     backgroundColor: '#ddd',
@@ -239,4 +310,32 @@ const styles = StyleSheet.create({
   loader: {
     marginVertical: 20,
   },
+  badge: {
+        position: 'absolute',
+        zIndex: 100,
+        top: 15,
+        right: 60,
+        backgroundColor: 'red',
+        color: '#fff',
+        fontSize: 12,
+        height: 20,
+        minWidth: 20,
+        borderRadius: 10,
+        textAlign: 'center',
+        paddingHorizontal: 4,
+    },
+
+    chatRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+    },
+
+    trashIcon: {
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 });
