@@ -165,7 +165,7 @@ const Search = () => {
       ref={questionsScrollViewRef}
       contentContainerStyle={styles.scene}>
       {searchQuestions && searchQuestions.map((question, i) => (
-        <TouchableOpacity onPress={() => navigation.navigate('SingleQuestion', { questionSlug: question.slug })} key={i} style={styles.resultItem}>
+        <TouchableOpacity onPress={() => navigation?.navigate('SingleQuestion', { questionSlug: question.slug })} key={i} style={styles.resultItem}>
           <Text>{question.title}</Text>
         </TouchableOpacity>
       ))}

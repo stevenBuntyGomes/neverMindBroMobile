@@ -21,7 +21,7 @@ import axios from 'axios';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { nulifyNewMessageSuccess } from '../../Reducers/messageReducer';
 
-const ScrollableChat = ({ chatId, messages, auth }) => {
+const ScrollableChat = ({ chatId = '', messages = [], auth = '' }) => {
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.user);
   const { deleteMessageId, newMessageReceived } = useSelector((state) => state.messages);
@@ -154,7 +154,7 @@ const ScrollableChat = ({ chatId, messages, auth }) => {
             style={styles.messageWrapper}
           >
             {(isSameSender(allMessages, message, index, auth?._id) || isLastMessage(allMessages, index, auth?._id)) && (
-              <Text style={styles.senderName}>{message.sender?.name}</Text>
+              <Text style={styles.senderName}>{message?.sender?.name}</Text>
             )}
             <View
               style={[

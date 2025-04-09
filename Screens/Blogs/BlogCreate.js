@@ -26,7 +26,7 @@ import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { ENDPOINT } from '../../config';
 import { io } from 'socket.io-client';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import { filterFunction } from '../../Components/Filters/filter';
 
 let socket;
@@ -112,7 +112,7 @@ const BlogCreate = () => {
       if(newBlog){
         console.log(auth.name);
         newBlogNotificationHandler();
-        navigation.navigate('SingleBlog', { blogSlug: newBlog?.slug });
+        navigation?.navigate('SingleBlog', { blogSlug: newBlog?.slug });
       }
     }, [newBlog]);
 
@@ -234,12 +234,12 @@ const BlogCreate = () => {
           <Text style={styles.buttonText}>Publish</Text>
         </TouchableOpacity>
         <Text style={styles.label}>The output will look like this</Text>
-        <RenderHtml
+        {/* <RenderHtml
             contentWidth={contentWidth}
             baseStyle={{ fontSize: 18 }}
             source={{ html: outputText }}
             // source={{ html: `${answer.body.slice(0, 230)}...` }}
-          />
+          /> */}
       </>
     );
   };

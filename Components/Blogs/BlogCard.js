@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
-import RenderHTML from 'react-native-render-html';
+// import RenderHTML from 'react-native-render-html';
 // import InfoBlogs from '../crud/InfoBlogs'; // Assuming you have this component converted for React Native
 import { Avatar } from 'react-native-elements';
 import { Grid } from 'react-native-paper';
@@ -11,10 +11,10 @@ import User from '../User/User';
 dayjs.extend(relativeTime);
 
 const BlogCard = ({
-    blog,
-    categories,
-    tags,
-    auth,
+    blog = '',
+    categories = [],
+    tags = [],
+    auth = '',
 }) => {
     const contentWidth = Dimensions.get('window').width;
     const navigation = useNavigation();
@@ -26,7 +26,7 @@ const BlogCard = ({
                 {blog && blog?.categories?.map((category, index) => (
                     <TouchableOpacity
                         key={index}
-                        // onPress={() => navigation.navigate('CategoryScreen', { slug: category.slug })}
+                        // onPress={() => navigation?.navigate('CategoryScreen', { slug: category.slug })}
                         style={styles.categoryButton}
                     >
                         <Text style={styles.buttonText}>{category.name}</Text>
@@ -43,7 +43,7 @@ const BlogCard = ({
                 {blog && blog.tags?.map((tag, index) => (
                     <TouchableOpacity
                         key={index}
-                        // onPress={() => navigation.navigate('TagScreen', { slug: tag.slug })}
+                        // onPress={() => navigation?.navigate('TagScreen', { slug: tag.slug })}
                         style={styles.tagButton}
                     >
                         <Text style={styles.buttonTextTags}>{tag.name}</Text>
@@ -56,9 +56,9 @@ const BlogCard = ({
 
   return (
     <ScrollView>
-            <View onPress={() => navigation.navigate('SingleBlog', { blogSlug: blog?.slug })} style={styles.card}>
+            <View onPress={() => navigation?.navigate('SingleBlog', { blogSlug: blog?.slug })} style={styles.card}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.navigate('SingleBlog', { blogSlug: blog?.slug })}>
+                    <TouchableOpacity onPress={() => navigation?.navigate('SingleBlog', { blogSlug: blog?.slug })}>
                         <Text style={styles.title}>{blog && blog.title}</Text>
                     </TouchableOpacity>
                     {/* {auth && auth._id === blog?.postedBy?._id ? (
@@ -97,8 +97,11 @@ const BlogCard = ({
                         />
                     </View>
                     <View style={styles.excerptContainer}>
-                        <RenderHTML contentWidth={contentWidth} source={{ html: blog.excerpt }} baseStyle={{ fontSize: 18 }}/>
-                        <TouchableOpacity onPress={() => navigation.navigate('SingleBlog', { blogSlug: blog?.slug })}>
+                        <Text style={styles.answerBody}>
+                            {blog?.excerpt}
+                        </Text>
+                        {/* <RenderHTML contentWidth={contentWidth} source={{ html: blog.excerpt }} baseStyle={{ fontSize: 18 }}/> */}
+                        <TouchableOpacity onPress={() => navigation?.navigate('SingleBlog', { blogSlug: blog?.slug })}>
                             <Text style={styles.readMore}>Read More</Text>
                         </TouchableOpacity>
                     </View>
@@ -206,5 +209,9 @@ const styles = StyleSheet.create({
         marginTop: 8,
         color: 'black',
         fontWeight: 'bold',
+    },
+    answerBody: {
+        fontSize: 16,
+        marginVertical: 10,
     },
 });

@@ -23,12 +23,12 @@ const HeaderTabs = ({}) => {
     const tokenGo = await AsyncStorage.getItem('@token');
     console.log(tokenGo);
     await AsyncStorage.removeItem('@token');
-    // navigation.navigate('Signup');
+    // navigation?.navigate('Signup');
     dispatch(signout());
   };
 
   const handlePress = () => {
-    navigation.navigate(nav);
+    navigation?.navigate(nav);
     console.log(nav);
   }
 
@@ -71,10 +71,10 @@ const HeaderTabs = ({}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPressIn = {() => navigation.navigate('Search')} style={styles.headerElements}>
+        <TouchableOpacity onPressIn = {() => navigation?.navigate('Search')} style={styles.headerElements}>
           <FontAwesome5 name="search" size={25} color="#333" />
         </TouchableOpacity>
-        <TouchableOpacity onPressIn = {() => navigation.navigate('Notifications')} style={styles.headerElements}>
+        <TouchableOpacity onPressIn = {() => navigation?.navigate('Notifications')} style={styles.headerElements}>
           <View>
             <FontAwesome5 name="bell" size={25} color="#333" />
               {notificationCount.length > 0 && (

@@ -28,7 +28,7 @@ const Signup = () => {
 
     useEffect(() => {
         if (isAuth()) {
-            navigation.navigate('Activate', { preToken });
+            navigation?.navigate('Activate', { preToken });
         }
     }, [isAuth, dispatch]);
 
@@ -74,7 +74,7 @@ const Signup = () => {
 
     useEffect(() => {
         if(preToken !== null){
-          navigation.navigate('Activate', { preToken });
+          navigation?.navigate('Activate', { preToken });
         }
     }, [preToken]);
 
@@ -134,7 +134,7 @@ const Signup = () => {
                     </TouchableOpacity>
                     <Texts small center>
                         Already have an account?  
-                        <Texts onPress={() => navigation.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
+                        <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
                     </Texts>
                 </View>
 

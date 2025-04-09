@@ -57,7 +57,7 @@ const Signin = () => {
                             value={password}
                             onChangeText={setPassword}
                         />
-                        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                        <TouchableOpacity onPress={() => navigation?.navigate('ForgotPassword')}>
                             <Text style={styles.a}>Forgot Password</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
@@ -65,12 +65,12 @@ const Signin = () => {
                         </TouchableOpacity>
                         <Texts small center>
                             Don't have an account yet?
-                            <Texts onPress={() => navigation.navigate('Signup')} color = "#ff2222">Sign Up</Texts>
+                            <Texts onPress={() => navigation?.navigate('Signup')} color = "#ff2222">Sign Up</Texts>
                         </Texts>
                         <Texts 
                             small 
                             center
-                            onPress={() => navigation.navigate('ForgotPassword')}
+                            onPress={() => navigation?.navigate('ForgotPassword')}
                             style = {{ marginTop: 10, }}
                         >
                             Forgot Password?

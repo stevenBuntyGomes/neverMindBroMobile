@@ -5,7 +5,7 @@ import { Dimensions, SafeAreaView, View, Text, Image, StyleSheet, ActivityIndica
 import { useSelector, useDispatch } from 'react-redux'
 import { API } from '../../config';
 import Reaction from '../Ask/Reaction';
-import RenderHTML from 'react-native-render-html';
+// import RenderHTML from 'react-native-render-html';
 import { useNavigation } from '@react-navigation/native';
 import User from './User';
 import DeleteQuestion from '../Ask/DeleteQuestion';
@@ -14,7 +14,7 @@ import AnswerDialog from '../Ask/AnswerDialog';
 import { getProfileAnswerAction, followUnfollowQuestionAction } from '../../Actions/questionAnswerAction';
 import Toast from 'react-native-toast-message';
 
-const ProfileAnswer = ({username}) => {
+const ProfileAnswer = ({username = null}) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const contentWidth = Dimensions.get('window').width;
@@ -98,15 +98,18 @@ const ProfileAnswer = ({username}) => {
         >
             {loadAnswers && loadAnswers.map((answer, index) => (
                 <View key = {index} style={styles.questionContainer}>
-                   <TouchableOpacity onPress={() => navigation.navigate('SingleQuestion', { questionSlug: answer?.question?.slug })} style={styles.resultItem}>
+                   <TouchableOpacity onPress={() => navigation?.navigate('SingleQuestion', { questionSlug: answer?.question?.slug })} style={styles.resultItem}>
                         <Text style={styles.questionTitle}>{answer?.question?.title}</Text>
                     </TouchableOpacity>
-                    <RenderHTML
+                    <Text style={styles.answerBody}>
+                        {showFullAnswer !== answer._id ? `${answer.body.slice(0, 230)}...` : answer.body}
+                    </Text>
+                    {/* <RenderHTML
                         baseStyle={{ fontSize: 18 }}
                         contentWidth={contentWidth}
                         source={{ html: showFullAnswer === answer._id ? answer.body : `${answer.body.slice(0, 230)}...` }}
                     // source={{ html: `${answer.body.slice(0, 230)}...` }}
-                    />
+                    /> */}
                     <Reaction question={answer?.question} answer={answer} />
                     <>
                         <TouchableOpacity 

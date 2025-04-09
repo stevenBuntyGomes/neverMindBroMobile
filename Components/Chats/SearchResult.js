@@ -11,7 +11,7 @@ import { setTokenApp } from '../../Actions/userAction';
 import axios from 'axios';
 // import Search from "../../Screens/Search/Search";
 
-const SearchResult = ({ search }) => {
+const SearchResult = ({ search = '' }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { searchChatUsers, userSize } = useSelector((state) => state.userChat);

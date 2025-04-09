@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 import Texts from '@kaloraat/react-native-text'
 import { useNavigation } from '@react-navigation/native'
 
-const ResetPassword = ({route}) => {
+const ResetPassword = ({route = null}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [newPassword, setNewPassword] = useState('');
@@ -62,7 +62,7 @@ const ResetPassword = ({route}) => {
             </TouchableOpacity>
             <Texts small center>
                 Already have an account?  
-                <Texts onPress={() => navigation.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
+                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
             </Texts>
             <Toast />
         </ScrollView>
@@ -91,7 +91,7 @@ const ResetPassword = ({route}) => {
             </TouchableOpacity>
             <Texts small center>
                 Already have an account?  
-                <Texts onPress={() => navigation.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
+                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
             </Texts>
             <Toast />
         </ScrollView>

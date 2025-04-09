@@ -7,7 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { Badge } from 'react-native-paper';
 import { useSelector } from 'react-redux'
 
-export const Icon = ({name, text, handlePress, screenName, routeName}) => {
+export const Icon = ({name = '', text = '', handlePress = '', screenName = '', routeName = ''}) => {
     const activeScreenColor = screenName === routeName && 'white';
     const { messageNotifications } = useSelector((state) => state.messages);
     const [messageNotificationCount, setMessageNotifciationCount] = useState([]);
@@ -44,35 +44,35 @@ const FooterTabs = () => {
                 <Icon
                     name = "home" 
                     text = "Home" 
-                    handlePress = {() => navigation.navigate('Home')}
+                    handlePress = {() => navigation?.navigate('Home')}
                     screenName = "Home"
                     routeName = {route.name} 
                 />
-                <Icon
+                {/* <Icon
                     name = "book" 
                     text = "book" 
-                    handlePress = {() => navigation.navigate('Blogs')}
+                    handlePress = {() => navigation?.navigate('Blogs')}
                     screenName = "Blogs"
                     routeName = {route.name} 
-                />
+                /> */}
                 <Icon
                     name = "facebook-messenger" 
                     text = "Chats" 
-                    handlePress = {() => navigation.navigate('Chats')}
+                    handlePress = {() => navigation?.navigate('Chats')}
                     screenName = "CreateBook"
                     routeName = {route.name} 
                 />
                 <Icon
                     name = "list-ol" 
                     text = "Profile" 
-                    handlePress = {() => navigation.navigate('Profile')}
+                    handlePress = {() => navigation?.navigate('Profile')}
                     screenName = "Profile"
                     routeName = {route.name}  
                 />
                 <Icon 
                     name = "user" 
                     text = "Account" 
-                    handlePress = {() => navigation.navigate('Account')}
+                    handlePress = {() => navigation?.navigate('Account')}
                     screenName = "Account"
                     routeName = {route.name}
                 />

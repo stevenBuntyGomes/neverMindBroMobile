@@ -8,16 +8,16 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime);
 
 const User = ({
-    userId, 
-    name, 
-    photo, 
-    username,
+    userId = null, 
+    name = null, 
+    photo = null, 
+    username = null,
     createdAt = null,
 }) => {
     const navigation = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('ProfileUser', { username: username })} style={styles.commentCardLink}>
+    <TouchableOpacity onPress={() => navigation?.navigate('ProfileUser', { username: username })} style={styles.commentCardLink}>
         <View style={styles.userSection}>
             <Avatar
                 rounded

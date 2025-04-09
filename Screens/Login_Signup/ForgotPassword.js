@@ -33,7 +33,7 @@ const ForgotPassword = () => {
   useEffect(() => {
     if(fpToken !== null){
       // router.push(`/auth/password/reset/ResetCode`);
-      navigation.navigate('ResetPassword');
+      navigation?.navigate('ResetPassword');
     }
   }, [fpToken]);
 
@@ -56,7 +56,7 @@ const ForgotPassword = () => {
             </TouchableOpacity>
             <Texts small center>
                 Already have an account?  
-                <Texts onPress={() => navigation.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
+                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
             </Texts>
             <Toast />
         </ScrollView>

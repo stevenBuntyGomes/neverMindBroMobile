@@ -27,6 +27,9 @@ import {
     searchUserRequest,
     searchUserSuccess,
     searchUserFailuer,  
+    deleteSingleChatRequest,
+    deleteSingleChatSuccess,
+    deleteSingleChatFailure,
 } from '../Reducers/chatReducer'
 import {     
     markMessageNotificationRequest,
@@ -255,3 +258,28 @@ export const searchUserAction = (search) => async (dispatch) => {
     }
 } 
 // search user
+
+// delete single chat handler
+export const deleteSingleChatHandler = (chat) => async (dispatch) => {
+    try{
+        const token = await AsyncStorage.getItem('@token');
+        dispatch(deleteSingleChatRequest());
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                "token": `${token}`
+            },
+        };
+        console.log('delete video request workig fine');
+        const {data, status} = await axios.post(`${API}/chat/delete_single_chat`, {chat}, config);
+        if(status == 401){
+            handleResponse(status);
+        }else{
+            await dispatch(deleteSingleChatSuccess(data));
+        }
+    }catch(error){
+        dispatch(deleteSingleChatFailure(error.response.data.message));
+    }
+}
+
+// delete single chat handler

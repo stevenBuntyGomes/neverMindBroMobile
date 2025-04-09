@@ -23,6 +23,7 @@ import { sendMessage, fetchMessages, sendMessageNotifications } from '../../Acti
 import { setSelectedChat, fetchChats } from '../../Actions/chatAction';
 import { getAuthUserInPublic } from '../../Actions/publicUserAction';
 import { getSender, getSenderFull } from './chatConfig';
+import { filterFunction } from '../Filters/filter';
 import { getSocket } from '../../SocketClient';
 import ScrollableChat from './ScrollableChat';
 import { API } from '../../config';
@@ -32,12 +33,13 @@ import { notificationChatSuccess } from '../../Reducers/chatReducer';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { setTokenApp } from '../../Actions/userAction';
+import UpdateGroupChatModal from './UpdateGroupChatModal';
 
 
 // Initialize Socket
 let socket, selectedChatCompare;
 
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+const SingleChat = ({}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const route = useRoute();
@@ -47,6 +49,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { categories } = useSelector((state) => state.category);
   const chat = route?.params?.chat; // Retrieve chatId from navigation params
   const [newMessage, setNewMessage] = useState('');
+  const [outputText, setOutputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [typing, setTyping] = useState(false);
   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
@@ -102,6 +105,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   }, [SelectedChat, dispatch]);
 
+  useEffect(() => {
+      if(outputText !== ""){
+        const result = filterFunction(outputText, selectedCategory);
+        setNewMessage(result);
+      }
+  }, [selectedCategory, outputText]);
+
   const handleReceivedMessage = async (message) => {
     if (!selectedChatCompare || selectedChatCompare._id !== message?.chat?._id) {
       if (!messageNotifications?.includes(message)) {
@@ -147,6 +157,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const typeHandler = (text) => {
     setNewMessage(text);
+    setOutputText(text);
     if (!typing) {
       setTyping(true);
       socket?.emit('typing', SelectedChat._id);
@@ -172,10 +183,23 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
               <FontAwesome5 name="arrow-left" size={20} color="black" />
             </TouchableOpacity>
-            <Text style={styles.chatTitle}>
-              {SelectedChat.isGroupChat ? SelectedChat.chatName.toUpperCase() : getSender(auth, SelectedChat.users)}
-            </Text>
+
+            <View style={{ flex: 1, alignItems: 'center' }}>
+              <Text style={styles.chatTitle}>
+                {SelectedChat?.isGroupChat
+                  ? SelectedChat.chatName.toUpperCase()
+                  : getSender(auth, SelectedChat.users)}
+              </Text>
+            </View>
+
+            <View style={{ marginLeft: 'auto' }}>
+              <UpdateGroupChatModal 
+                SelectedChat = {SelectedChat && SelectedChat}
+                user = {auth && auth}
+              />
+            </View>
           </View>
+
 
           {/* Messages List */}
           <View style={styles.messagesContainer}>
@@ -197,7 +221,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           )}
 
           {/* Message Input */}
-          <View style={styles.inputContainer}>TouchableOpacity
+          <View style={styles.inputContainer}>
             <TouchableOpacity onPress={() => setCategoryModalVisible(true)} style={styles.iconButton}>
               <FontAwesome5 name="smile" size={22} color="gray" />
             </TouchableOpacity>

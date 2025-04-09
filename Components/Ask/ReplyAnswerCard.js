@@ -25,7 +25,7 @@ import { addRemoveLikeinAnswerReply, deleteReplyOnCommentAnswerAction } from '..
 import UpdateReplyAnswer from './UpdateReplyAnswer';
 import { LikeNotificationAction, unlikeNotificationAction } from '../../Actions/NotificationAction';
 import User from '../User/User';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import {io} from 'socket.io-client'
 import { getSocket } from '../../SocketClient';
 let socket;
@@ -125,11 +125,14 @@ const ReplyAnswerCard = ({
             photo={photo}
             username={username}
           />
-          <RenderHtml
+          <Text style={styles.answerBody}>
+              {comment}
+          </Text>
+          {/* <RenderHtml
             contentWidth={contentWidth}
             source={{ html: comment }}
-            // source={{ html: `${answer.body.slice(0, 230)}...` }}
-          />
+            
+          /> */}
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity 
@@ -272,6 +275,11 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+
+  answerBody: {
+    fontSize: 16,
+    marginVertical: 10,
   },
 
 });

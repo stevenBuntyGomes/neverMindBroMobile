@@ -24,7 +24,6 @@ import { filterFunction } from '../Filters/filter';
 import * as Animatable from 'react-native-animatable';
 import {io} from 'socket.io-client'
 import { getSocket } from '../../SocketClient';
-import RenderHtml from 'react-native-render-html';
 let socket;
 
 const handleHead = ({tintColor}) => <Text style={{color: tintColor, fontWeight: 'bold'}}>H2</Text>

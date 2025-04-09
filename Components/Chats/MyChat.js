@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChats, setSelectedChat } from '../../Actions/chatAction';
+import { fetchChats, setSelectedChat, deleteSingleChatHandler } from '../../Actions/chatAction';
 import { sendMessage, fetchMessages, sendMessageNotifications } from '../../Actions/messageAction';
 import { getSender } from './chatConfig';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -25,7 +25,7 @@ import { io } from 'socket.io-client';
 import { getSocket } from '../../SocketClient';
 import SearchDialogBox from './SearchDialogBox';
 import { Badge } from 'react-native-paper';
-
+import GroupChatModal from './GroupChatModal';
 // Socket connection
 let socket = null;
 const ENDPOINT = API; // Ensure this is defined properly in config
@@ -33,7 +33,7 @@ const ENDPOINT = API; // Ensure this is defined properly in config
 const MyChat = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { userChats, chat: selectedChat, newChat, chatSize } = useSelector((state) => state.userChat);
+  const { userChats, chat: selectedChat, newChat, chatSize, deleteChatId } = useSelector((state) => state.userChat);
   const { messageNotifications, messageReceivedNotify } = useSelector((state) => state.messages);
   const { token, auth, user } = useSelector((state) => state.user);
   const [allChats, setAllChats] = useState([]);
@@ -66,7 +66,7 @@ const MyChat = () => {
   };
 
   const setSelectedChatHandler = async (chat) => {
-    navigation.navigate('ResponsiveChatBox', { chat: chat }); // Navigate to chat screen
+    navigation?.navigate('ResponsiveChatBox', { chat: chat }); // Navigate to chat screen
     await dispatch(setSelectedChat(chat));
   };
 
@@ -114,10 +114,17 @@ const MyChat = () => {
     }
   };
 
+  const deleteChatHandler = async (chat) => {
+    await dispatch(deleteSingleChatHandler(chat));
+    // console.log('delete video has been clicked');
+  }
+
   useEffect(() => {
     getAuthUserHandler();
     getToken();
+    fetchChatHandler();
   }, []);
+
   useEffect(() => {
     fetchChatHandler();
   }, [auth]);
@@ -147,12 +154,30 @@ const MyChat = () => {
     });
   }, [selectedChat]);
 
+    // delete and remove chat user 
+    useEffect(() => {
+      if (!deleteChatId) return;
+
+      setAllChats(prevChats => {
+        const updatedChats = prevChats.filter(chat => chat?._id !== deleteChatId);
+        return updatedChats;
+      });
+
+      console.log('Chat deleted from list =>', deleteChatId);
+  }, [deleteChatId]);
+  // delete and remove chat user 
+
 
   useEffect(() => {
     if (!newChat) return;
     setAllChats((prevChats) => {
       const filteredChats = prevChats.filter((chat) => chat?._id !== newChat?.chat?._id);
-      const updated = [newChat?.chat, ...filteredChats];
+      var updated = [];
+      if(newChat.isGroupChat){
+        updated = [newChat, ...filteredChats];
+      }else{
+        updated = [newChat?.chat, ...filteredChats];
+      }
       // console.log('new updated chat is created with new message =>', updated);
       calculateUnreadMessages(updated);
       return updated;
@@ -177,6 +202,7 @@ const MyChat = () => {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Chats</Text>
+          <GroupChatModal auth = {auth && auth}/>
         <SearchDialogBox />
       </View>
 
@@ -214,7 +240,9 @@ const MyChat = () => {
               </View>
 
               {/* Trash icon */}
-              <TouchableOpacity style={styles.trashIcon}>
+              <TouchableOpacity 
+                onPress={() => deleteChatHandler(item)}
+                style={styles.trashIcon}>
                 <FontAwesome5 name="trash" size={20} color="gray" />
               </TouchableOpacity>
             </View>
@@ -338,4 +366,21 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
+
+    button: {
+      borderWidth: 1,
+      borderColor: 'black',
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderRadius: 8,
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    text: {
+      color: 'black',
+      fontWeight: '500',
+    },
+
 });

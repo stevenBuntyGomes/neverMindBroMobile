@@ -10,7 +10,7 @@ import {
 import { useDispatch } from 'react-redux';
 
 
-const DeleteNotification = ({notification}) => {
+const DeleteNotification = ({notification = ''}) => {
     const [menuVisible, setMenuVisible] = useState(false);
     const dispatch = useDispatch();
 

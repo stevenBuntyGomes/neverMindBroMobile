@@ -99,7 +99,7 @@ const Notifications = () => {
                     <View key={index} style={styles.notificationContainer}>
                         <TouchableOpacity
                             onPress={() => 
-                                navigation.navigate(
+                                navigation?.navigate(
                                     notification.targetType !== null ? 'SingleQuestion' : 'SingleBlog', 
                                     notification.targetType !== null 
                                         ? { questionSlug: notification.link } 

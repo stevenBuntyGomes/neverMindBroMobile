@@ -74,8 +74,8 @@ const ProfileUser = () => {
                 return <ProfileQuestion username={username} />;
             case 'answers':
                 return <ProfileAnswer username={username} />;
-            case 'blogs':
-                return <ProfileBlog username={username} />;
+            // case 'blogs':
+            //     return <ProfileBlog username={username} />;
             default:
                 return null;
         }
@@ -94,7 +94,7 @@ const ProfileUser = () => {
             >
                 <View style={styles.questionContainer}>
                     <TouchableOpacity 
-                        onPress={() => navigation.navigate('ProfileUser', { username: user?.username })} 
+                        onPress={() => navigation?.navigate('ProfileUser', { username: user?.username })} 
                         style={styles.commentCardLink}
                     >
                         <Image 
@@ -109,16 +109,16 @@ const ProfileUser = () => {
                     <TouchableOpacity 
                     //followersfollowings
                         style={styles.button} 
-                        onPress={() => navigation.navigate('followersfollowings', { username: user?.username })}>
+                        onPress={() => navigation?.navigate('followersfollowings', { username: user?.username })}>
                         <Text style={styles.buttonText}>Followers</Text>
                     </TouchableOpacity>
                     
-                    {auth &&auth?._id ? (
+                    {auth && auth?._id ? (
                         <>
                             {user?._id == auth?._id ? (
                                 <TouchableOpacity 
                                     style={styles.button} 
-                                    onPress={() => navigation.navigate('ProfileSettings')}>
+                                    onPress={() => navigation?.navigate('ProfileSettings')}>
                                     <Text style={styles.buttonText}>Settings</Text>
                                 </TouchableOpacity>
                             ) : (

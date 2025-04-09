@@ -21,10 +21,9 @@ import { getAuthUserInPublic, publicUserForFollow } from '../../Actions/publicUs
 import Toast from 'react-native-toast-message';
 import { useNavigation, useRoute } from '@react-navigation/native';
 // import { useCookies } from 'react-cookie';
-import RenderHtml from 'react-native-render-html';
 import FooterTabs from '../../Components/nav/FooterTabs';
 import { readSingleBlog } from '../../Actions/blogAction';
-import RenderHTML from 'react-native-render-html';
+// import RenderHTML from 'react-native-render-html';
 import BlogReaction from '../../Components/Blogs/BlogReaction';
 
 const SingleBlog = () => {
@@ -68,7 +67,7 @@ const SingleBlog = () => {
                 {selectedBlog && selectedBlog?.categories?.map((category, index) => (
                     <TouchableOpacity
                         key={index}
-                        onPress={() => navigation.navigate('CategoryScreen', { slug: category.slug })}
+                        onPress={() => navigation?.navigate('CategoryScreen', { slug: category.slug })}
                         style={styles.categoryButton}
                     >
                         <Text style={styles.buttonText}>{category.name}</Text>
@@ -86,7 +85,7 @@ const SingleBlog = () => {
                 {selectedBlog && selectedBlog.tags?.map((tag, index) => (
                     <TouchableOpacity
                         key={index}
-                        onPress={() => navigation.navigate('TagScreen', { slug: tag.slug })}
+                        onPress={() => navigation?.navigate('TagScreen', { slug: tag.slug })}
                         style={styles.tagButton}
                     >
                         <Text style={styles.buttonTextTags}>{tag.name}</Text>
@@ -135,9 +134,9 @@ const SingleBlog = () => {
             </View>
           )}
           
-          <View style={styles.excerptContainer}>
+          {/* <View style={styles.excerptContainer}>
               <RenderHTML contentWidth={contentWidth} source={{ html: selectedBlog?.body }} baseStyle={{ fontSize: 18 }}/>
-          </View>
+          </View> */}
         </View>
         <BlogReaction blog = {selectedBlog && selectedBlog} auth = {auth}/>
       </ScrollView>

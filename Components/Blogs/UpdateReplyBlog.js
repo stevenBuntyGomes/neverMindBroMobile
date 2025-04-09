@@ -19,7 +19,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
 import {WebView} from 'react-native-webview';
 import User from '../User/User';
-import RenderHtml from 'react-native-render-html';
 let socket;
 
 

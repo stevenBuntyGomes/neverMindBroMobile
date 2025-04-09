@@ -40,7 +40,7 @@ const ProfileSettings = () => {
 
   useEffect(() => {
     if(updatedUser !== null){
-      navigation.navigate('ProfileUser', { username: updatedUser?.username });
+      navigation?.navigate('ProfileUser', { username: updatedUser?.username });
     }
   }, [updatedUser]);
   useEffect(() => {

@@ -39,7 +39,7 @@ const DeleteQuestion = ({question}) => {
 
       if (currentRoute === 'SingleQuestion') {
         // Navigate back to home page if in SingleQuestion page
-        navigation.navigate('Home');
+        navigation?.navigate('Home');
       } else {
         // Stay on the home page
       }
@@ -64,7 +64,7 @@ const DeleteQuestion = ({question}) => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.dialog}>
-              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UpdateQuestion', { 
+              <TouchableOpacity style={styles.button} onPress={() => navigation?.navigate('UpdateQuestion', { 
                 questionUpdate: question,
                 questionId: question._id,
               })}>

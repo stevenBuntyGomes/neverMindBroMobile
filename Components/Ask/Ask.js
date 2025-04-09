@@ -49,7 +49,7 @@ const Ask = ({ auth }) => {
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.button} 
-                onPress={() => navigation.navigate('BlogCreate')}>
+                onPress={() => navigation?.navigate('BlogCreate')}>
                 <FontAwesome5
                     name = "plus"
                     size = {16} 

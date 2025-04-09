@@ -26,7 +26,7 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID, ENDPOINT } from '../../config';
 import UpdateAnswerDialog from './UpdateAnswerDialog';
 import WriteReplyAnswer from './WriteReplyAnswer';
 import ReplyAnswerCard from './ReplyAnswerCard';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import User from '../User/User';
 import { getSingle } from '../../Actions/questionAnswerAction'
 import UpdateCommentAnswer from './UpdateCommentAnswer';
@@ -135,15 +135,14 @@ const CommentAnswerCard = ({
             photo={photo}
             username={username}
           />
-          {/* <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text>
+          <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text>
           <Text style={styles.answerBody}>
-              {showFullAnswer !== answer._id ? `${answer.body.slice(0, 230)}...` : answer.body}
-          </Text> */}
-          <RenderHtml
+              {comment}
+          </Text>
+          {/* <RenderHtml
             contentWidth={contentWidth}
             source={{ html: comment }}
-            // source={{ html: `${answer.body.slice(0, 230)}...` }}
-          />
+          /> */}
           {/* <Reaction question={selectedQuestion} answer={reactionAnswer} /> */}
           {/* {comment?.body?.length > 230 && (
             <>
@@ -383,6 +382,11 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+
+  answerBody: {
+    fontSize: 16,
+    marginVertical: 10,
   },
 
 });

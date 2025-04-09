@@ -13,7 +13,7 @@ import { API } from '../../config';
 import { setTokenApp } from '../../Actions/userAction';
 import { getAuthUserInPublic } from '../../Actions/publicUserAction';
 import Reaction from '../Ask/Reaction';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import { useNavigation } from '@react-navigation/native';
 import User from '../User/User';
 import DeleteQuestion from '../Ask/DeleteQuestion';
@@ -242,7 +242,7 @@ useEffect(() => {
                         <DeleteQuestion question={question && question}/>
                       ) : (<></>)}
                     </View>
-                    <TouchableOpacity onPress={() => navigation.navigate('SingleQuestion', { questionSlug: question.slug })} style={styles.resultItem}>
+                    <TouchableOpacity onPress={() => navigation?.navigate('SingleQuestion', { questionSlug: question.slug })} style={styles.resultItem}>
                         <Text style={styles.questionTitle}>{question?.title}</Text>
                     </TouchableOpacity>
                     
@@ -252,16 +252,16 @@ useEffect(() => {
 
                     {question && question.answer?.slice(0, 5).map((answer, index) => (
                         <View key={index}>
-                            {/* <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text>
+                            {/* <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text> */}
                             <Text style={styles.answerBody}>
                                 {showFullAnswer !== answer._id ? `${answer.body.slice(0, 230)}...` : answer.body}
-                            </Text> */}
-                            <RenderHtml
-                            baseStyle={{ fontSize: 18 }}
-                            contentWidth={contentWidth}
-                            source={{ html: showFullAnswer === answer._id ? answer.body : `${answer.body.slice(0, 230)}...` }}
-                            // source={{ html: `${answer.body.slice(0, 230)}...` }}
-                            />
+                            </Text>
+                            {/* <RenderHtml
+                              baseStyle={{ fontSize: 18 }}
+                              contentWidth={contentWidth}
+                              source={{ html: showFullAnswer === answer._id ? answer.body : `${answer.body.slice(0, 230)}...` }}
+                              // source={{ html: `${answer.body.slice(0, 230)}...` }}
+                            /> */}
                             <Reaction question={question && question} answer={answer} />
                             {answer.body.length > 230 && (
                             <>
@@ -326,7 +326,7 @@ useEffect(() => {
                         <DeleteQuestion question={question && question}/>
                       ) : (<></>)}
                     </View>
-                    <TouchableOpacity onPress={() => navigation.navigate('SingleQuestion', { questionSlug: question.slug })} style={styles.resultItem}>
+                    <TouchableOpacity onPress={() => navigation?.navigate('SingleQuestion', { questionSlug: question.slug })} style={styles.resultItem}>
                         <Text style={styles.questionTitle}>{question?.title}</Text>
                     </TouchableOpacity>
                     
@@ -336,16 +336,16 @@ useEffect(() => {
 
                     {question && question.answer?.slice(0, 5).map((answer, index) => (
                         <View key={index}>
-                            {/* <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text>
+                            {/* <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text> */}
                             <Text style={styles.answerBody}>
                                 {showFullAnswer !== answer._id ? `${answer.body.slice(0, 230)}...` : answer.body}
-                            </Text> */}
-                            <RenderHtml
+                            </Text>
+                            {/* <RenderHtml
                             baseStyle={{ fontSize: 18 }}
                             contentWidth={contentWidth}
                             source={{ html: showFullAnswer === answer._id ? answer.body : `${answer.body.slice(0, 230)}...` }}
                             // source={{ html: `${answer.body.slice(0, 230)}...` }}
-                            />
+                            /> */}
                             <Reaction question={question && question} answer={answer} />
                             {answer.body.length > 230 && (
                             <>

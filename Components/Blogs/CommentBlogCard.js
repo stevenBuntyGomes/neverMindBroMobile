@@ -25,7 +25,7 @@ import { IconButton } from 'react-native-paper';
 import { API, DOMAIN, APP_NAME, FB_APP_ID, ENDPOINT } from '../../config';
 import WriteReplyBlog from './WriteReplyBlog';
 import ReplyBlogCard from './ReplyBlogCard';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import User from '../User/User';
 import { getSingle } from '../../Actions/questionAnswerAction'
 import UpdateCommentBlog from './UpdateCommentBlog';
@@ -132,11 +132,13 @@ const CommentBlogCard = ({
             photo={photo && photo}
             username={username}
           />
-          <RenderHtml
+          <Text style={styles.answerBody}>
+              {comment}
+          </Text>
+          {/* <RenderHtml
             contentWidth={contentWidth}
             source={{ html: comment }}
-            // source={{ html: `${answer.body.slice(0, 230)}...` }}
-          />
+          /> */}
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity 
@@ -359,6 +361,10 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  answerBody: {
+      fontSize: 16,
+      marginVertical: 10,
   },
 
 });

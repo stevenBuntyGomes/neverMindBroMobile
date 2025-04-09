@@ -23,7 +23,6 @@ import { isAuth, getUserProfile } from '../../Actions/userAction'
 import UpdateAnswerDialog from './UpdateAnswerDialog';
 import { LikeNotificationAction, unlikeNotificationAction } from '../../Actions/NotificationAction';
 import { API, DOMAIN, APP_NAME, FB_APP_ID, ENDPOINT } from '../../config';
-import RenderHtml from 'react-native-render-html';
 import Toast from 'react-native-toast-message';
 import {io} from 'socket.io-client'
 import { getSocket } from '../../SocketClient';

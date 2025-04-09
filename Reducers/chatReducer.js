@@ -9,6 +9,7 @@ const initialState = {
     chatSize: 0,
     searchChatUsers: [],
     userSize: 0,
+    deleteChatId: null,
 };
 
 export const userChatReducer = createSlice({
@@ -47,7 +48,7 @@ export const userChatReducer = createSlice({
         },
         createGroupChatSuccess: (state, action) => {
             state.loading = false;
-            state.userChats.chats = [action.payload.fullGroupChat, ...state.userChats.chats];
+            state.newChat = action.payload.fullGroupChat;
         },
         createGroupChatFailure: (state, action) => {
             state.loading = false;
@@ -152,6 +153,19 @@ export const userChatReducer = createSlice({
             state.loading = false;
             state.searchChatUsers = [];
         },
+        // search user reducer ends
+        deleteSingleChatRequest: (state, action) => {
+            state.loading = true;
+        },
+        deleteSingleChatSuccess: (state, action) => {
+            state.loading = false;
+            state.deleteChatId = action.payload.deletedChatId;
+            state.chat = state.chat && state.chat?._id === action.payload.deletedChatId ? null : state.chat;
+            // state.userSize = action.payload.size;
+        },
+        deleteSingleChatFailure: (state, action) => {
+            state.loading = false;
+        },
         
     }
 
@@ -187,6 +201,9 @@ export const {
     searchUserSuccess,
     searchUserFailuer,
     emptySearchUser,
+    deleteSingleChatRequest,
+    deleteSingleChatSuccess,
+    deleteSingleChatFailure,
 } = userChatReducer.actions;
 
 export default userChatReducer.reducer;

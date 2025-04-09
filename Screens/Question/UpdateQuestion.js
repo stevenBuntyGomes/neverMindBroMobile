@@ -17,7 +17,7 @@ import { getTags } from '../../Actions/tagAction';
 import * as Animatable from 'react-native-animatable';
 import { filterFunction } from '../../Components/Filters/filter';
 
-const UpdateQuestion = ({ route }) => {
+const UpdateQuestion = ({ route = '' }) => {
   const dispatch = useDispatch();
   const [question, setQuestion] = useState('');
   const [questionId, setQuestionId] = useState(null);

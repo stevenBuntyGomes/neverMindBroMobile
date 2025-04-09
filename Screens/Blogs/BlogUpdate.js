@@ -31,7 +31,7 @@ const handleHead5 = ({tintColor}) => <Text style={{color: tintColor, fontWeight:
 const handleHead6 = ({tintColor}) => <Text style={{color: tintColor, fontWeight: 'bold'}}>H6</Text>
 
 
-const BlogUpdate = ({ route }) => {
+const BlogUpdate = ({ route = null }) => {
     const richText = useRef();
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -87,7 +87,7 @@ const BlogUpdate = ({ route }) => {
 
     useEffect(() => {
       if(updatedBlog){
-        navigation.navigate('SingleBlog', { blogSlug: updatedBlog?.slug });
+        navigation?.navigate('SingleBlog', { blogSlug: updatedBlog?.slug });
       }
     }, [updatedBlog]);
     const publishBlog = async (e) => {

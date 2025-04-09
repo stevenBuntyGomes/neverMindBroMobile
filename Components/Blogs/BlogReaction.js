@@ -24,7 +24,7 @@ import { isAuth, getUserProfile } from '../../Actions/userAction'
 // import { LikeNotificationAction, unlikeNotificationAction } from '../../Actions/NotificationAction';
 // import { io } from 'socket.io-client';
 import { API, DOMAIN, APP_NAME, FB_APP_ID, ENDPOINT } from '../../config';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
 import { nullifyBlog } from '../../Reducers/blogReducer';
@@ -32,7 +32,7 @@ import { blogLikeNotificationAction } from '../../Actions/NotificationAction';
 import {io} from 'socket.io-client'
 let socket;
 
-const BlogReaction = ({ blog, auth }) => {
+const BlogReaction = ({ blog = '', auth = '' }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const contentWidth = Dimensions.get('window').width;
@@ -93,7 +93,7 @@ const BlogReaction = ({ blog, auth }) => {
 
   useEffect(() => {
     if(blogDeleteMessage !== null){
-      navigation.navigate('Blogs');
+      navigation?.navigate('Blogs');
     }
   }, [blogDeleteMessage]);
 
@@ -172,7 +172,7 @@ const BlogReaction = ({ blog, auth }) => {
                     >
                     <View style={styles.modalContainer}>
                         <View style={styles.dialog}>
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('BlogUpdate', { 
+                            <TouchableOpacity style={styles.button} onPress={() => navigation?.navigate('BlogUpdate', { 
                                 blogUpdate: blog,
                                 blogId: blog?._id,
                                 blogRole: blog?.postedBy?.role

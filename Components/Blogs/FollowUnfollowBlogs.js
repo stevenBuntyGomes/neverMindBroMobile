@@ -13,7 +13,7 @@ import { API } from '../../config';
 import { setTokenApp } from '../../Actions/userAction';
 import { getAuthUserInPublic } from '../../Actions/publicUserAction';
 import Reaction from '../Ask/Reaction';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import { useNavigation } from '@react-navigation/native';
 import User from '../User/User';
 import DeleteQuestion from '../Ask/DeleteQuestion';

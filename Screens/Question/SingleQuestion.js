@@ -29,7 +29,7 @@ import Reaction from '../../Components/Ask/Reaction';
 import Toast from 'react-native-toast-message';
 import { useNavigation, useRoute } from '@react-navigation/native';
 // import { useCookies } from 'react-cookie';
-import RenderHtml from 'react-native-render-html';
+// import RenderHtml from 'react-native-render-html';
 import DeleteQuestion from '../../Components/Ask/DeleteQuestion';
 import FooterTabs from '../../Components/nav/FooterTabs';
 
@@ -108,7 +108,7 @@ const SingleQuestion = () => {
 
   const deleteQuestionHandler = async (questionId) => {
     await dispatch(deleteQuestionAction(questionId));
-    navigation.navigate('Home');
+    navigation?.navigate('Home');
   };
 
   const loadMoreAnswerHandler = async () => {
@@ -315,16 +315,16 @@ useEffect(() => {
                       username={answer.postedBy?.username}
                       createdAt={answer && answer?.createdAt}
                     />
-                    {/* <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text>
+                    {/* <Text style={styles.answerDate}>Published {formatDistanceToNow(new Date(answer?.createdAt))}</Text> */}
                     <Text style={styles.answerBody}>
                         {showFullAnswer !== answer._id ? `${answer.body.slice(0, 230)}...` : answer.body}
-                    </Text> */}
-                    <RenderHtml
+                    </Text>
+                    {/* <RenderHtml
                       contentWidth={contentWidth}
                       baseStyle={{ fontSize: 18 }}
                       source={{ html: showFullAnswer === answer._id ? answer.body : `${answer.body.slice(0, 230)}...` }}
                       // source={{ html: `${answer.body.slice(0, 230)}...` }}
-                    />
+                    /> */}
                     <Reaction question={selectedQuestion} answer={answer} />
                     {answer.body.length > 230 && (
                       <>

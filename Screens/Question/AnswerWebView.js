@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Provider } from 'react-native-paper';
 
-const AnswerWebView = ({answerView}) => {
+const AnswerWebView = () => {
   return (
     <View >
         <WebView

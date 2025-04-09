@@ -5,7 +5,6 @@ import { Dimensions, SafeAreaView, View, Text, Image, StyleSheet, ActivityIndica
 import { useSelector, useDispatch } from 'react-redux'
 import { API } from '../../config';
 import Reaction from '../Ask/Reaction';
-import RenderHTML from 'react-native-render-html';
 import { useNavigation } from '@react-navigation/native';
 import User from './User';
 import DeleteQuestion from '../Ask/DeleteQuestion';
@@ -14,7 +13,7 @@ import AnswerDialog from '../Ask/AnswerDialog';
 import { getProfileQuestionAction, followUnfollowQuestionAction } from '../../Actions/questionAnswerAction';
 import Toast from 'react-native-toast-message';
 
-const ProfileQuestion = ({username}) => {
+const ProfileQuestion = ({username = null}) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const {auth, user, loading: userLoading} = useSelector((state) => state.user);
@@ -117,7 +116,7 @@ const ProfileQuestion = ({username}) => {
         >
             {loadQuestions && loadQuestions.map((question, index) => (
                 <View key = {index} style={styles.questionContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('SingleQuestion', { questionSlug: question.slug })} style={styles.resultItem}>
+                    <TouchableOpacity onPress={() => navigation?.navigate('SingleQuestion', { questionSlug: question.slug })} style={styles.resultItem}>
                         <Text style={styles.questionTitle}>{question?.title}</Text>
                     </TouchableOpacity>
                     <View style={styles.actionsContainer}>

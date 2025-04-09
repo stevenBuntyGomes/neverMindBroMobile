@@ -87,7 +87,7 @@ const ActivateAccount = () => {
             </TouchableOpacity>
             <Texts small center>
                 Already have an account?  
-                <Texts onPress={() => navigation.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
+                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
             </Texts>
             <Toast />
         </ScrollView>
