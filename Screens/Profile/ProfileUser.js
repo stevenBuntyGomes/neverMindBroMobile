@@ -28,7 +28,7 @@ const ProfileUser = () => {
     const [routes] = useState([
         { key: 'questions', title: 'Questions' },
         { key: 'answers', title: 'Answers' },
-        { key: 'blogs', title: 'Blogs' },
+        // { key: 'blogs', title: 'Blogs' },
     ]);
     const userFollowhandlers = (condition) => {
         setFollowUsers(!followUsers);

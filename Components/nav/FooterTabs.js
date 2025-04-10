@@ -6,6 +6,7 @@ import {Divider} from 'react-native-elements'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { Badge } from 'react-native-paper';
 import { useSelector } from 'react-redux'
+import { getAuthUserInPublic } from '../../Actions/publicUserAction'
 
 export const Icon = ({name = '', text = '', handlePress = '', screenName = '', routeName = ''}) => {
     const activeScreenColor = screenName === routeName && 'white';
@@ -37,6 +38,15 @@ export const Icon = ({name = '', text = '', handlePress = '', screenName = '', r
 const FooterTabs = () => {
     const navigation = useNavigation();
     const route = useRoute();
+    const { user, auth, token } = useSelector((state) => state.user);
+
+    const getAuthUserHandler = async () => {
+        await dispatch(getAuthUserInPublic());
+    };
+
+    useEffect(() => {
+        getAuthUserHandler();
+    }, []);
     return(
         <>
             <Divider width={1}/>
@@ -72,7 +82,7 @@ const FooterTabs = () => {
                 <Icon 
                     name = "user" 
                     text = "Account" 
-                    handlePress = {() => navigation?.navigate('Account')}
+                    handlePress = {() => navigation?.navigate('ProfileUser', { username: auth && auth?.username })}
                     screenName = "Account"
                     routeName = {route.name}
                 />
