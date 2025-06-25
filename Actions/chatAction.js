@@ -230,6 +230,35 @@ export const groupChatRemoveMember = (setSelectedChat, user) => async (dispatch)
 }
 
 
+// update filter starts
+export const updateFilter = (chatId, userId, filterFrequency) => async (dispatch) => {
+    try{
+        dispatch(userChatRequest());
+        console.log('i am here man');
+        const token = await AsyncStorage.getItem('@token');
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                "token": `${token}`
+            },
+        };
+        
+        const {data, status} = await axios.post(`${API}/chat/update_filter`, {
+            chatId,
+            userId,
+            filterFrequency
+        }, config);
+        if(status == 401){
+            handleResponse(status);
+        }else{
+            dispatch(userChatSuccess(data));
+        }
+    }catch(error){
+        dispatch(userChatFailure(error.response.data.message));
+    }
+}
+// update filter ends
+
 // search user
 export const searchUserAction = (search) => async (dispatch) => {
     try{

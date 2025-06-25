@@ -6,7 +6,6 @@ import {jwtDecode} from 'jwt-decode';
 import Toast from 'react-native-toast-message';
 import { signup, checkSignupCodeAction } from '../../Actions/userAction';
 import { nullifyPreToken } from '../../Reducers/userReducer'; 
-import Texts from '@kaloraat/react-native-text'
 
 const ActivateAccount = () => {
   const dispatch = useDispatch();
@@ -85,10 +84,16 @@ const ActivateAccount = () => {
             <TouchableOpacity style={styles.button} onPress={clickSubmit}>
                 <Text style={styles.buttonText}>Never Mind Bro! Activate Account...</Text>
             </TouchableOpacity>
-            <Texts small center>
-                Already have an account?  
-                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
-            </Texts>
+            <Text style={{ textAlign: 'center', fontSize: 12, marginTop: 10 }}>
+              Already have an account?{' '}
+              <Text 
+                onPress={() => navigation?.navigate('Signin')} 
+                style={{ color: '#ff2222', fontWeight: 'bold' }}
+              >
+                Sign In
+              </Text>
+            </Text>
+
             <Toast />
         </ScrollView>
       

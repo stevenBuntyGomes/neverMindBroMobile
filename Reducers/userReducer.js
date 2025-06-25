@@ -30,6 +30,9 @@ const userReducer = createSlice({
             state.error = null;
             state.emailInfo = null;
         },
+        nullifyMessage: (state, action) => {
+            state.message = null;
+        },
         nullifyPreToken: (state, action) => {
             state.error = null;
             state.preToken = null;
@@ -245,7 +248,42 @@ const userReducer = createSlice({
             state.loading = false;
             state.error = action.payload.error;
         },
-
+        acceptFollowUserRequest: (state, action) => {
+            state.loading = true;
+        },
+        acceptFollowUserSuccess: (state, action) => {
+            state.loading = false;
+            // state.user = action.payload;
+            state.FollowUser = action.payload.user;
+        },
+        acceptFollowUserFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload.error;
+        },
+        rejectFollowUserRequest: (state, action) => {
+            state.loading = true;
+        },
+        rejectFollowUserSuccess: (state, action) => {
+            state.loading = false;
+            // state.user = action.payload;
+            state.FollowUser = action.payload.user;
+        },
+        rejectFollowUserFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload.error;
+        },
+        cancelFollowUserRequest: (state, action) => {
+            state.loading = true;
+        },
+        cancelFollowUserSuccess: (state, action) => {
+            state.loading = false;
+            // state.user = action.payload;
+            state.FollowUser = action.payload.user;
+        },
+        cancelFollowUserFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload.error;
+        },
         // get user for follwo request
         // get auth user reducer starts
         getAuthUserRequest: (state, action) => {
@@ -289,6 +327,21 @@ const userReducer = createSlice({
             state.error = action.payload.error;
         },
         // get profile user information 
+        getUserFilterUpdateRequest: (state, action) => {
+            state.loading = true;
+        },
+        getUserFilterUpdateSuccess: (state, action) => {
+            state.loading = false;
+            state.auth = action.payload.user;
+            state.message = action.payload.message;
+            // state.questions = action.payload.questions;
+            // state.answers = action.payload.answers;
+        },
+        getUserFilterUpdateFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload.error;
+        },
+        // get user filter update
     }
 });
 export const {
@@ -342,6 +395,15 @@ export const {
     followUserRequest,
     followUserSuccess,
     followUserFailure,
+    acceptFollowUserRequest,
+    acceptFollowUserSuccess,
+    acceptFollowUserFailure,
+    rejectFollowUserRequest,
+    rejectFollowUserSuccess,
+    rejectFollowUserFailure,
+    cancelFollowUserRequest,
+    cancelFollowUserSuccess,
+    cancelFollowUserFailure,
     getAuthUserRequest,
     getAuthUserSuccess,
     getAuthUserFailure,
@@ -351,6 +413,10 @@ export const {
     getProfileInformationsRequest,
     getProfileInformationsSuccess,
     getProfileInformationsFailure,
+    getUserFilterUpdateRequest,
+    getUserFilterUpdateSuccess,
+    getUserFilterUpdateFailure,
+    nullifyMessage,
 } = userReducer.actions;
 
 export default userReducer.reducer;

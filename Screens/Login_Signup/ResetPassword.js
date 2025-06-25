@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { forgotPasswordAction, resetPasswordAction, resetPasswordCodeAction } from '../../Actions/userAction';
 import { nullifyFpToken } from '../../Reducers/userReducer';
 import Toast from 'react-native-toast-message';
-import Texts from '@kaloraat/react-native-text'
 import { useNavigation } from '@react-navigation/native'
 
 const ResetPassword = ({route = null}) => {
@@ -60,10 +59,15 @@ const ResetPassword = ({route = null}) => {
             <TouchableOpacity style={styles.button} onPress={handleResetCode}>
                 <Text style={styles.buttonText}>Send Password Reset Code</Text>
             </TouchableOpacity>
-            <Texts small center>
-                Already have an account?  
-                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
-            </Texts>
+            <Text style={{ textAlign: 'center', fontSize: 12, marginTop: 10 }}>
+              Already have an account?{' '}
+              <Text 
+                onPress={() => navigation?.navigate('Signin')} 
+                style={{ color: '#ff2222', fontWeight: 'bold' }}
+              >
+                Sign In
+              </Text>
+            </Text>
             <Toast />
         </ScrollView>
         
@@ -89,10 +93,15 @@ const ResetPassword = ({route = null}) => {
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Send Password Reset Code</Text>
             </TouchableOpacity>
-            <Texts small center>
-                Already have an account?  
-                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
-            </Texts>
+            <Text style={{ textAlign: 'center', fontSize: 12, marginTop: 10 }}>
+              Already have an account?{' '}
+              <Text 
+                onPress={() => navigation?.navigate('Signin')} 
+                style={{ color: '#ff2222', fontWeight: 'bold' }}
+              >
+                Sign In
+              </Text>
+            </Text>
             <Toast />
         </ScrollView>
         

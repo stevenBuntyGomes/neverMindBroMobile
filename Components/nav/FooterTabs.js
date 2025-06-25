@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {TouchableOpacity, View, StyleSheet} from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import Texts from '@kaloraat/react-native-text'
 import {Divider} from 'react-native-elements'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { Badge } from 'react-native-paper';

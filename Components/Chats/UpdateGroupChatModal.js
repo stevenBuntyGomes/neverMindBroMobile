@@ -20,19 +20,34 @@ import {
 } from '../../Actions/chatAction';
 import { searchUser } from '../../Actions/chatAction';
 import { FontAwesome } from '@expo/vector-icons';
+import { nullifyChatMessage } from '../../Reducers/chatReducer';
+import { updateFilter } from '../../Actions/chatAction';
 
 const UpdateGroupChatModal = ({SelectedChat, user}) => {
   const dispatch = useDispatch();
-  const { searchChatUsers: users } = useSelector((state) => state.userChat);
+  const { searchChatUsers: users, message } = useSelector((state) => state.userChat);
 //   const { user } = useSelector((state) => state.user);
 
   const [open, setOpen] = useState(false);
   const [groupChatName, setGroupChatName] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState('');
+  const [selectedNumber, setSelectedNumber] = useState(2);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const updateFilterFunction = async () => {
+    if (!SelectedChat?._id || !user?._id){
+      console.log('SelectedChat or user is not defined');
+    }else{
+      // console.log('button pressed');
+      await dispatch(updateFilter(SelectedChat._id, user._id, selectedNumber));
+    }
+    
+  };
+
 
   const handleRemove = async (delUser) => {
     await dispatch(groupChatRemoveMember(SelectedChat, delUser));
@@ -70,12 +85,29 @@ const UpdateGroupChatModal = ({SelectedChat, user}) => {
     }
   }, [SelectedChat]);
 
+
+  useEffect(() => {
+    if (message) {
+      Alert.alert(
+        'Success',
+        message,
+        [
+          {
+            text: 'Close',
+            onPress: () => dispatch(nullifyChatMessage()),
+            style: 'default',
+          },
+        ],
+        { cancelable: true }
+      );
+    }
+  }, [message]);
+
   return (
     <View>
       <TouchableOpacity onPress={handleOpen} style={styles.iconButton}>
         <FontAwesome name="cog" size={24} color="black" />
       </TouchableOpacity>
-
       <Modal visible={open} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
@@ -135,6 +167,50 @@ const UpdateGroupChatModal = ({SelectedChat, user}) => {
                 </>
               )}
 
+              <Text style={{ marginTop: 10, marginBottom: 5, fontWeight: '600' }}>
+                After how many words should filter apply:
+              </Text>
+              {/* start of filter  */}
+              <Text style={{ marginTop: 10, marginBottom: 5, fontWeight: '600' }}>
+                After how many words should filter apply:
+              </Text>
+
+              <TouchableOpacity 
+                onPress={() => setFilterModalVisible(true)} 
+                style={styles.input}
+              >
+                <Text>{selectedNumber ? `${selectedNumber} words` : "Select a number"}</Text>
+              </TouchableOpacity>
+
+              {/* Modal for selecting number */}
+              <Modal visible={filterModalVisible} transparent animationType="slide">
+                <View style={styles.modalOverlay}>
+                  <View style={styles.modalContainer}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                      {[2, 4, 8, 10].map((num) => (
+                        <TouchableOpacity
+                          key={num}
+                          onPress={() => {
+                            setSelectedNumber(num);
+                            setFilterModalVisible(false);
+                          }}
+                          style={styles.modalItem}
+                        >
+                          <Text style={styles.modalText}>{num}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                    <TouchableOpacity onPress={() => setFilterModalVisible(false)} style={styles.closeButton}>
+                      <Text style={styles.closeButtonText}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
+
+              <TouchableOpacity style={styles.button} onPress={() => updateFilterFunction()}>
+                <Text style={styles.buttonText}>Update Filter</Text>
+              </TouchableOpacity>
+              {/* end of filter  */}
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: 'red' }]}
                 onPress={() => handleRemove(user)}
@@ -229,6 +305,27 @@ const styles = StyleSheet.create({
     color: '#555',
     marginTop: 10,
   },
+
+  modalItem: {
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+  },
+  closeButton: {
+    padding: 15,
+    backgroundColor: '#333',
+    borderRadius: 6,
+    marginTop: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+
 });
 
 export default UpdateGroupChatModal;

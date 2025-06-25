@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, View, TextInput, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView, ScrollView, View, TextInput, StyleSheet, Text, TouchableOpacity, Image, Alert, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { userUpdate, getProfile, userImageUpdateAciton, updateUserPassword } from '../../Actions/publicUserAction';
+import { userUpdate, getProfile, userImageUpdateAciton, updateUserPassword, updateContentFilter } from '../../Actions/publicUserAction';
 import * as ImagePicker from 'expo-image-picker';
 import FooterTabs from '../../Components/nav/FooterTabs';
 import Toast from 'react-native-toast-message';
+import { nullifyMessage } from '../../Reducers/userReducer';
 
 const ProfileSettings = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { user, loading, updatedUser, message } = useSelector((state) => state.user);
-
+  const [selectedNumber, setSelectedNumber] = useState(null);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -43,18 +45,28 @@ const ProfileSettings = () => {
       navigation?.navigate('ProfileUser', { username: updatedUser?.username });
     }
   }, [updatedUser]);
+
   useEffect(() => {
-    if(message !== null){
+    if (message !== null) {
       Toast.show({
         type: 'success',
-        text1: `${message}`,
+        text1: message,
       });
+      dispatch(nullifyMessage());
     }
   }, [message]);
+
 
   const getUserInformationHandler = async () => {
     await dispatch(getProfile());
   };
+
+  const updateFilterFunction = async () => {
+    if (selectedNumber !== null) {
+      await dispatch(updateContentFilter(selectedNumber));
+    }
+  };
+
 
   const handleImagePicker = async () => {
     // Request permission to access the media library
@@ -199,6 +211,47 @@ const ProfileSettings = () => {
           <TouchableOpacity onPress={handlePasswordSubmit} style={styles.button}>
             <Text style={styles.buttonText}>Update Password</Text>
           </TouchableOpacity>
+
+          {/* update filter starts */}
+          <Text style={{ marginTop: 10, marginBottom: 5, fontWeight: '600' }}>
+            After how many words should filter apply:
+          </Text>
+
+          <TouchableOpacity 
+            onPress={() => setFilterModalVisible(true)} 
+            style={styles.input}
+          >
+            <Text>{selectedNumber ? `${selectedNumber} words` : "Select a number"}</Text>
+          </TouchableOpacity>
+
+          {/* Modal for selecting number */}
+          <Modal visible={filterModalVisible} transparent animationType="slide">
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  {[2, 4, 8, 10].map((num) => (
+                    <TouchableOpacity
+                      key={num}
+                      onPress={() => {
+                        setSelectedNumber(num);
+                        setFilterModalVisible(false);
+                      }}
+                      style={styles.modalItem}
+                    >
+                      <Text style={styles.modalText}>{num}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+                <TouchableOpacity onPress={() => setFilterModalVisible(false)} style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          <TouchableOpacity style={styles.button} onPress={updateFilterFunction}>
+            <Text style={styles.buttonText}>Update Filter</Text>
+          </TouchableOpacity>
+          {/* update filter ends */}
         </View>
       </ScrollView>
       <Toast/>
@@ -251,4 +304,37 @@ const styles = StyleSheet.create({
         backgroundColor: '#333',
         justifyContent: 'flex-end',
     },
+
+    modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    width: '90%',
+    borderRadius: 10,
+    padding: 20,
+    maxHeight: '85%',
+  },
+  modalItem: {
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+  },
+  closeButton: {
+    padding: 15,
+    backgroundColor: '#333',
+    borderRadius: 6,
+    marginTop: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
 });

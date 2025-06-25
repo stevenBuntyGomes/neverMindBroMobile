@@ -26,6 +26,9 @@ import {
     userPasswordUpdateRequest,
     userPasswordUpdateSuccess,
     userPasswordUpdateFailure,
+    getUserFilterUpdateRequest,
+    getUserFilterUpdateSuccess,
+    getUserFilterUpdateFailure,
  } from "../Reducers/userReducer";
 
 // set local storage starts
@@ -172,6 +175,25 @@ export const publicUserForFollow = (username) => async (dispatch) => {
     }
 };
 // get Public user for Followers ends
+
+// update content filter action starts
+export const updateContentFilter = (filterFrequency) => async (dispatch) => {
+    try{
+        dispatch(getUserFilterUpdateRequest());
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+        };
+        const token = await AsyncStorage.getItem('@token');
+        const {data} = await axios.post(`${API}/auth/publicUser/update/contentFilter`, {token, filterFrequency}, config);
+        dispatch(getUserFilterUpdateSuccess(data));
+    }catch(error){
+        dispatch(getUserFilterUpdateFailure(error));
+    }
+};
+// update content filter action ends
 
 // get auth user in public action starts
 export const getAuthUserInPublic = (username) => async (dispatch) => {

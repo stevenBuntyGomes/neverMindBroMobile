@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signin, authenticate, isAuth } from '../../Actions/userAction';
 import GoogleLoginButton from './GoogleLoginButton';
 import { registerSignError, nullifySignError } from '../../Reducers/userReducer';
-import Texts from '@kaloraat/react-native-text'
 
 const Signin = () => {
     const navigation = useNavigation();
@@ -63,18 +62,27 @@ const Signin = () => {
                         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                             <Text style={styles.buttonText}>Sign In</Text>
                         </TouchableOpacity>
-                        <Texts small center>
-                            Don't have an account yet?
-                            <Texts onPress={() => navigation?.navigate('Signup')} color = "#ff2222">Sign Up</Texts>
-                        </Texts>
-                        <Texts 
-                            small 
-                            center
+                        <Text style={{ textAlign: 'center', fontSize: 12 }}>
+                            Don't have an account yet?{' '}
+                            <Text 
+                                onPress={() => navigation?.navigate('Signup')} 
+                                style={{ color: '#ff2222' }}
+                            >
+                                Sign Up
+                            </Text>
+                        </Text>
+                        <Text 
                             onPress={() => navigation?.navigate('ForgotPassword')}
-                            style = {{ marginTop: 10, }}
-                        >
+                            style={{ 
+                                textAlign: 'center',
+                                fontSize: 12,
+                                marginTop: 10,
+                                color: '#ff2222',
+                                textDecorationLine: 'underline'
+                            }}
+                            >
                             Forgot Password?
-                        </Texts>
+                            </Text>
                         <View style={styles.socialContainer}>
                             <GoogleLoginButton />
                         </View>

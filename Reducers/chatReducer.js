@@ -16,15 +16,19 @@ export const userChatReducer = createSlice({
     name: 'userChatReducer',
     initialState,
     reducers: {
+        nullifyChatMessage: (state, action) => {
+            state.message = null;
+        },
         userChatRequest: (state, action) => {
             state.loading= true;
         },
         userChatSuccess: (state, action) => {
             state.chat = action.payload.chat;
+            state.message = action.payload.message;
             // state.userChats = [action.payload.chat, ...state.userChats];
         },
         userChatFailure: (state, action) => {
-
+            state.error = action.payload;
         },
 
         // fetch Chats
@@ -204,6 +208,7 @@ export const {
     deleteSingleChatRequest,
     deleteSingleChatSuccess,
     deleteSingleChatFailure,
+    nullifyChatMessage,
 } = userChatReducer.actions;
 
 export default userChatReducer.reducer;

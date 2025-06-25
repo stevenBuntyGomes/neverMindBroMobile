@@ -11,7 +11,6 @@ import { useNavigation } from '@react-navigation/native';
 // import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { registerSignError, nullifySignError } from '../../Reducers/userReducer';
 import CheckBox from 'expo-checkbox';
-import Texts from '@kaloraat/react-native-text'
 import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -148,10 +147,15 @@ const Signup = () => {
                     <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={!termsChecked}>
                         <Text style={styles.buttonText}>Sign Up</Text>
                     </TouchableOpacity>
-                    <Texts small center>
-                        Already have an account?  
-                        <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
-                    </Texts>
+                    <Text style={{ textAlign: 'center', fontSize: 12 }}>
+                        Already have an account?{' '}
+                        <Text 
+                            onPress={() => navigation?.navigate('Signin')} 
+                            style={{ color: '#ff2222' }}
+                        >
+                            Sign In
+                        </Text>
+                    </Text>
                 </View>
 
                 <Modal

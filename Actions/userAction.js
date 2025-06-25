@@ -42,6 +42,15 @@ import {
     followUserRequest,
     followUserSuccess,
     followUserFailure,
+    acceptFollowUserRequest,
+    acceptFollowUserSuccess,
+    acceptFollowUserFailure,
+    rejectFollowUserRequest,
+    rejectFollowUserSuccess,
+    rejectFollowUserFailure,
+    cancelFollowUserRequest,
+    cancelFollowUserSuccess,
+    cancelFollowUserFailure,
     getAuthUserRequest,
     getAuthUserSuccess,
     getAuthUserFailure,
@@ -58,25 +67,35 @@ import {
 
 
 // export handle response starts
-const handleResponse = async (res) => {
-    if(res.status == 401){
-            await AsyncStorage.removeItem('@token');
-            dispatch(signoutRequest());
-            const config = {
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-            };
-            const {data} = await axios.post(`${API}/auth/signout`, config);
-            dispatch(signoutSuccess(data));
-            
-            next();
-            
-        }else{
-            return;
-        }
-}
+export const handleResponse = async (res, dispatch, next) => {
+  if (res.status === 401) {
+    // Clear token from async storage
+    await AsyncStorage.removeItem('@token');
+
+    // Dispatch signout request
+    dispatch(signoutRequest());
+
+    try {
+      const config = {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(`${API}/auth/signout`, config);
+      dispatch(signoutSuccess(data));
+    } catch (err) {
+      console.error("Signout API failed silently:", err.message);
+      // Proceed regardless
+    }
+
+    // Call the next function if it exists
+    if (typeof next === 'function') {
+      next();
+    }
+  }
+};
 // export handle response ends
 // signup
 // get profile
@@ -131,10 +150,10 @@ export const preSignup = (name, email, password, profileImage) => async (dispatc
             },
         };
         const {data} = await axios.post(`${API}/auth/pre-signup`, {name, email, password, profileImage}, config);
-        dispatch(preSignupSuccess(data));
+        await dispatch(preSignupSuccess(data));
     }catch(error){
         let errorMessage = 'pre signuop error'
-        dispatch(preSignupFailure(errorMessage));
+        await dispatch(preSignupFailure(error && error?.message));
     }
 }
 // pre signup method ends
@@ -396,5 +415,78 @@ export const followAndUnfollowUser = (id) => async (dispatch) => {
     }
 }
 // follow unfollow user action ends
+
+// accept follow request action starts
+export const acceptFollowRequestAction = (id) => async (dispatch) => {
+    try{
+        dispatch(acceptFollowUserRequest());
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+        };
+        const token = await AsyncStorage.getItem('@token');
+        // console.log(token);
+        const {data, status} = await axios.post(`${API}/auth/profile/accept_follow_request`, {id, token}, config);
+        if(status == 401){
+            console.log("status is:", status);
+            await handleResponse({ status }, dispatch);
+        }else{
+            dispatch(acceptFollowUserSuccess(data));
+        }
+    } catch(error){
+        dispatch(acceptFollowUserFailure(error.response.data.message));
+    }
+}
+// accept follow request action ends
+// reject follow request action starts
+export const rejectFollowRequestAction = (id) => async (dispatch) => {
+    try{
+        dispatch(rejectFollowUserRequest());
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+        };
+        const token = await AsyncStorage.getItem('@token');
+        // console.log(token);
+        const {data, status} = await axios.post(`${API}/auth/profile/reject_follow_request`, {id, token}, config);
+        if(status == 401){
+            console.log("status is:", status);
+            await handleResponse({ status }, dispatch);
+        }else{
+            dispatch(rejectFollowUserSuccess(data));
+        }
+    } catch(error){
+        dispatch(rejectFollowUserFailure(error.response.data.message));
+    }
+}
+// reject follow request action ends
+// cancel follow requestion action starts
+export const cancelFollowRequestAction = (id) => async (dispatch) => {
+    try{
+        dispatch(cancelFollowUserRequest());
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+        };
+        const token = await AsyncStorage.getItem('@token');
+        // console.log(token);
+        const {data, status} = await axios.post(`${API}/auth/profile/cancel_follow_request`, {id, token}, config);
+        if(status == 401){
+            console.log("status is:", status);
+            await handleResponse({ status }, dispatch);
+        }else{
+            dispatch(cancelFollowUserSuccess(data));
+        }
+    } catch(error){
+        dispatch(cancelFollowUserFailure(error.response.data.message));
+    }
+}
+// cancel follow requestion action ends
 
 

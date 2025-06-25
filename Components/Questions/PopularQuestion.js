@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StyleSheet, Text, View, SafeAreaView, ActivityIndicator,
   ScrollView, TouchableOpacity, Image, Dimensions} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import Texts from '@kaloraat/react-native-text'
 import SubmitButton from '../auth/SubmitButton';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';

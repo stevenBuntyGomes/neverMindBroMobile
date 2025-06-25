@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { forgotPasswordAction } from '../../Actions/userAction';
 import { useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-toast-message';
-import Texts from '@kaloraat/react-native-text'
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
@@ -54,10 +53,15 @@ const ForgotPassword = () => {
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Send Password Reset Code</Text>
             </TouchableOpacity>
-            <Texts small center>
-                Already have an account?  
-                <Texts onPress={() => navigation?.navigate('Signin')} color = "#ff2222"> Sign In</Texts>
-            </Texts>
+            <Text style={{ textAlign: 'center', fontSize: 12, marginTop: 10 }}>
+              Already have an account?{' '}
+              <Text 
+                onPress={() => navigation?.navigate('Signin')} 
+                style={{ color: '#ff2222', fontWeight: 'bold' }}
+              >
+                Sign In
+              </Text>
+            </Text>
             <Toast />
         </ScrollView>
         

@@ -1,7 +1,6 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Texts from '@kaloraat/react-native-text'
 import { Avatar } from 'react-native-elements';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'

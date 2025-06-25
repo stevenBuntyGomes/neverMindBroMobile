@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Image, Dimensions} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import Texts from '@kaloraat/react-native-text'
 import SubmitButton from '../../Components/auth/SubmitButton';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import FooterTabs from '../../Components/nav/FooterTabs';
